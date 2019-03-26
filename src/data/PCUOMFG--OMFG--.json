@@ -1,0 +1,350 @@
+{
+    "status": "REQUEST_SUCCEEDED",
+    "responseTime": 173,
+    "message": [],
+    "Results": {
+        "series": [
+            {
+                "seriesID": "PCUOMFG--OMFG--",
+                "data": [
+                    {
+                        "year": "2018",
+                        "period": "M12",
+                        "periodName": "December",
+                        "value": "195.2",
+                        "footnotes": [
+                            {
+                                "code": "P",
+                                "text": "Preliminary. All indexes are subject to revision four months after original publication."
+                            }
+                        ]
+                    },
+                    {
+                        "year": "2018",
+                        "period": "M11",
+                        "periodName": "November",
+                        "value": "197.9",
+                        "footnotes": [
+                            {
+                                "code": "P",
+                                "text": "Preliminary. All indexes are subject to revision four months after original publication."
+                            }
+                        ]
+                    },
+                    {
+                        "year": "2018",
+                        "period": "M10",
+                        "periodName": "October",
+                        "value": "199.8",
+                        "footnotes": [
+                            {
+                                "code": "P",
+                                "text": "Preliminary. All indexes are subject to revision four months after original publication."
+                            }
+                        ]
+                    },
+                    {
+                        "year": "2018",
+                        "period": "M09",
+                        "periodName": "September",
+                        "value": "198.5",
+                        "footnotes": [
+                            {
+                                "code": "P",
+                                "text": "Preliminary. All indexes are subject to revision four months after original publication."
+                            }
+                        ]
+                    },
+                    {
+                        "year": "2018",
+                        "period": "M08",
+                        "periodName": "August",
+                        "value": "198.6",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2018",
+                        "period": "M07",
+                        "periodName": "July",
+                        "value": "198.5",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2018",
+                        "period": "M06",
+                        "periodName": "June",
+                        "value": "198.4",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2018",
+                        "period": "M05",
+                        "periodName": "May",
+                        "value": "197.7",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2018",
+                        "period": "M04",
+                        "periodName": "April",
+                        "value": "195.3",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2018",
+                        "period": "M03",
+                        "periodName": "March",
+                        "value": "194.0",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2018",
+                        "period": "M02",
+                        "periodName": "February",
+                        "value": "193.5",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2018",
+                        "period": "M01",
+                        "periodName": "January",
+                        "value": "192.6",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2017",
+                        "period": "M12",
+                        "periodName": "December",
+                        "value": "191.3",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2017",
+                        "period": "M11",
+                        "periodName": "November",
+                        "value": "191.2",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2017",
+                        "period": "M10",
+                        "periodName": "October",
+                        "value": "190.2",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2017",
+                        "period": "M09",
+                        "periodName": "September",
+                        "value": "189.6",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2017",
+                        "period": "M08",
+                        "periodName": "August",
+                        "value": "188.4",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2017",
+                        "period": "M07",
+                        "periodName": "July",
+                        "value": "187.3",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2017",
+                        "period": "M06",
+                        "periodName": "June",
+                        "value": "187.6",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2017",
+                        "period": "M05",
+                        "periodName": "May",
+                        "value": "187.3",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2017",
+                        "period": "M04",
+                        "periodName": "April",
+                        "value": "187.6",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2017",
+                        "period": "M03",
+                        "periodName": "March",
+                        "value": "186.7",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2017",
+                        "period": "M02",
+                        "periodName": "February",
+                        "value": "186.2",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2017",
+                        "period": "M01",
+                        "periodName": "January",
+                        "value": "185.6",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2016",
+                        "period": "M12",
+                        "periodName": "December",
+                        "value": "183.9",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2016",
+                        "period": "M11",
+                        "periodName": "November",
+                        "value": "183.2",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2016",
+                        "period": "M10",
+                        "periodName": "October",
+                        "value": "183.7",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2016",
+                        "period": "M09",
+                        "periodName": "September",
+                        "value": "183.0",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2016",
+                        "period": "M08",
+                        "periodName": "August",
+                        "value": "182.5",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2016",
+                        "period": "M07",
+                        "periodName": "July",
+                        "value": "183.4",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2016",
+                        "period": "M06",
+                        "periodName": "June",
+                        "value": "183.6",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2016",
+                        "period": "M05",
+                        "periodName": "May",
+                        "value": "181.9",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2016",
+                        "period": "M04",
+                        "periodName": "April",
+                        "value": "180.5",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2016",
+                        "period": "M03",
+                        "periodName": "March",
+                        "value": "179.3",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2016",
+                        "period": "M02",
+                        "periodName": "February",
+                        "value": "178.7",
+                        "footnotes": [
+                            {}
+                        ]
+                    },
+                    {
+                        "year": "2016",
+                        "period": "M01",
+                        "periodName": "January",
+                        "value": "179.7",
+                        "footnotes": [
+                            {}
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

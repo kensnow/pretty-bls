@@ -1,0 +1,7 @@
+Download all data sets directly via postman - useful in case api issues as well as to see data and compare to charts
+
+get one chart type to look very nice (see web example at http://bl.ocks.org/dhoboy/3cf1259cd6e10e2e4aa1)
+
+create chart selector logic and style charts separately (index charts, positive & negative % change charts, base 100 percent charts)
+
+styling, lots of styling

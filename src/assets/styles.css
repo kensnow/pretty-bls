@@ -1,0 +1,188 @@
+*{
+    margin: 0;
+    font-family: 'Libre Baskerville', serif;
+}
+
+#mainDiv{
+    display: flex;
+    flex-direction: column;
+    margin: auto auto;
+}
+
+h1 {
+    font-size: 3em;
+    margin: 5px;
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: bold;
+    text-align: center;
+}
+
+h3 {
+    font-size:1.5em
+}
+
+
+nav {
+    display: flex;
+
+}
+
+nav a{
+    font-size: 1.2em;
+    text-decoration: none;
+    color: inherit;
+    padding: 5px;
+}
+
+nav .linkbar{
+    position: fixed;
+    right: 0;
+    margin: 5px;
+    /* background: snow; */
+    opacity: .7;
+}
+
+footer a{
+    text-decoration: none;
+    color:inherit;
+}
+footer{
+    margin: 5%;
+}
+
+.time-button-container{
+    display: flex;
+    justify-content: center;
+}
+.time-button{
+    
+    text-decoration: none;
+    background:inherit;
+    border: inherit;
+    font-size: 1em;
+    margin: 15px ;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 10px 0 rgba(0, 0, 0, 0.1);
+
+    
+}
+
+.bar:hover{
+    opacity: .3;
+    transition: .15s;
+
+}
+
+.linkbar a:hover{
+    position: relative;
+    transition: .4s;
+}
+.linkbar :before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: 0;
+    left: 0;
+    background-color: #000;
+    visibility: hidden;
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+    -webkit-transition: all 0.3s ease-in-out 0s;
+    transition: all 0.3s ease-in-out 0s;
+}
+
+
+.linkbar a:hover:before{
+    visibility: visible;
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+}
+
+
+.details{
+    margin: 5%;
+    line-height: 1.5em;
+    justify-content: center;
+    border-left: 3px solid rgb(8, 163, 29);
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    
+}
+
+h5{
+    opacity: .7;
+}
+
+.link{
+    display:flex;
+    /* flex-direction: column; */
+}
+
+.sidebar h3{
+    text-align: left;
+    margin-left: 20px;
+    padding:10px;
+}
+
+.sidebar a{
+  
+    line-height: 2em;
+    text-decoration: none;
+    color: inherit;
+    opacity: 1;
+
+}
+.sidebar{
+    display: flex;
+    justify-content:center; 
+}
+
+.center {
+    margin: 15% 10%;
+}
+
+a:hover{
+    opacity: .6;
+    color: #3D9970;
+    transition: .4s;
+}
+
+.chart{
+    margin: 5%;
+    height: 65vh;
+
+}
+
+
+
+
+@media(min-width: 600px){
+    .linkbar{
+    
+        font-size: 1.3em;
+        padding: 10px;
+    }
+    h1{
+        font-size: 4em;
+        padding: 5px;
+    }
+}
+
+@media(min-width: 900px){
+
+    h1{
+        font-size: 5em;
+        padding: 10px;
+    }
+
+    .linkbar{
+    
+        font-size: 1.6em;
+        padding: 20px;
+    }
+}
