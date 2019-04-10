@@ -84,6 +84,7 @@ export default class DataProvider extends Component {
     
 
     getNewData = (stateObj) => {
+        console.log(stateObj)
         return axios.post('/api/bls',stateObj
         )
             .then(res => {

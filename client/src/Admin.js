@@ -39,11 +39,12 @@ class Admin extends Component {
     }
 
     handleChange = ({target: {name, value}}) => {
-        this.setState({
+        this.setState(ps => ({
             study:{
+                ...ps.study,
                 [name]:value
             }
-        })
+        }))
     }
 
     handleSelect = ({target: {name, value}}) => {
@@ -60,7 +61,7 @@ class Admin extends Component {
     handleSubmit = (e) => {
 
         e.preventDefault()
-        e.target.id === 'edit' ? this.props.updateData(this.state.currentStudyId, this.state.study): this.props.getNewData({...this.state.study})
+        e.target.id === 'edit' ? this.props.updateData(this.state.currentStudyId, this.state.study): this.props.getNewData(this.state.study)
         console.log(e.target.id)
         // 
     }
@@ -120,7 +121,7 @@ class Admin extends Component {
                 <input type="text" name='title' placeholder='Study Title' onChange={this.handleChange}/>
                 <input type="text" name='subtitle' placeholder='Study Sub-Title' onChange={this.handleChange}/>
                 <textarea className='submission-field' type="text" name='description' placeholder='Study Description' onChange={this.handleChange}/>
-                <input type="text" name='yAxisName' placeholder='Enter Y Axis Label' onChange={this.handleChange}/>
+                <input type="text" name='yAxisLabel' placeholder='Enter Y Axis Label' onChange={this.handleChange}/>
                 <button>Submit</button>
             </form>
             </>
