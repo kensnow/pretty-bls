@@ -158,7 +158,23 @@ a:hover{
 
 }
 
+.submission-field{
+    height: 100px;
+}
 
+.admin-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    width: 50vw;
+}
+
+.admin-form > input{
+    padding: 10px;
+    margin: 5px 0 ;
+
+}
 
 
 @media(min-width: 600px){

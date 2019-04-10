@@ -2,16 +2,6 @@ import React, { Component, createContext } from 'react'
 import axios from "axios"
 import sidebarData from "./data/sidebarData"
 
-// import data from "./data/LNS14000000.json" //unemployment rate
-// import data from "./data/CUUR0000SA0.json"  //Consumer Price Index
-// import data from "./data/CES0000000001.json" //total nonfarm payroll
-// import data from "./data/CUSR0000SA0.json" //CPI % change index
-// import data from "./data/LNS11300000.json" //Labor Force Participation rate
-// import data from "./data/CES3000000001.json" //manufacturing employment
-// import data from "./data/CES0500000003.json"  //svg hrly earnings
-// import data from "./data/PCUOMFG--OMFG--.json"  //Producer Price index
-// import data from "./data/CIU2010000000000A.json" //total compensation % change
-// import data from "./data/PRS84006092.json"
 
 export const {Consumer, Provider} = createContext()
 
@@ -93,9 +83,26 @@ export default class DataProvider extends Component {
     }//end real get data
     
 
+    getNewData = (stateObj) => {
+        return axios.post('/api/bls',stateObj
+        )
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
     
-    
-
+    updateData = (id, studyObj) => {
+        return axios.put('/api/bls/'+ id, studyObj )
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
 
 
     handleClick(button, timeParam){
@@ -109,14 +116,11 @@ export default class DataProvider extends Component {
     render() {       
 
         const chartContext = {
-           
-            data: this.state.data,
             getDataInfo: this.handleClick,
-            title: this.state.title,
-            subtitle: this.state.subtitle,
             description: this.state.description,
-            loading: this.state.loading,
-            errMsg: this.state.errMsg
+            getNewData: this.getNewData,
+            updateData: this.updateData,
+            ...this.state
         }
 
         return (

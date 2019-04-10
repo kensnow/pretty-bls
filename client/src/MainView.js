@@ -6,7 +6,7 @@ import {Consumer} from "./DataProvider"
 import Chart from "./Chart"
 import Loading from "./Loading"
 import ErrMsg from "./ErrMsg"
-
+import Admin from './Admin'
 function MainView() {
     return (
             <div className="main">
@@ -14,6 +14,7 @@ function MainView() {
             
                 <Route exact path="/" component={Home} />
                 <Route path="/about" component={About} />
+                <Route path="/admin" component={Admin}/>
                 <Consumer>
                     {value => 
                         <Loading loading={value.loading}>
