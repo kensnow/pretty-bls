@@ -36,9 +36,9 @@ blsRouter.route('/')
         })
         .then(response => {
             
-            studyData = response.data.Results.series[0].data
+            const studyData = response.data.Results.series[0].data
 
-            studyObject = {
+            const studyObject = {
                 title,
                 subtitle,
                 yAxisName,
@@ -66,14 +66,43 @@ blsRouter.route('/')
 
     blsRouter.route('/:id')
         .put((req, res, next) => {
-            const mongoId = req.params.id
+            const seriesId = req.params.id
             const updates = res.body
-            Study.findByIdAndUpdate(mongoId, updates, {new:true})
-                .then(updatedStudy => res.status(200).send(updatedStudy))
-                .catch(err => {
-                    res.status(500)
-                    next(err)
+            const {seriesid, endyear, startyear, title, subtitle, yAxisName, description} = req.body
+            console.log(seriesid, endyear, startyear)
+            axios({
+                method: "post",
+                url: apiAddress,
+                data:{
+                    seriesid:[seriesid],
+                    endyear: endyear,
+                    startyear: startyear,
+                    catalog:false,
+                    calculations:false,
+                    registrationkey:apiKey
+                }
+            })
+                .then(response => {
+
+                    const studyData = response.data.Results.series[0].data
+
+                    const studyObject = {
+                        title,
+                        subtitle,
+                        yAxisName,
+                        description,
+                        seriesid,
+                        data: [...studyData]
+                    }
+
+                    Study.findOne({seriesid: seriesid})
+                    .then(foundStudy => console.log(foundStudy))
+                    .catch(err => {
+                        res.status(500)
+                        next(err)
+                    })
                 })
+
         })
 
 

@@ -95,8 +95,8 @@ export default class DataProvider extends Component {
             })
     }
     
-    updateData = (id, studyObj) => {
-        return axios.put('/api/bls/'+ id, studyObj )
+    updateData = (seriesid, studyObj) => {
+        return axios.put('/api/bls/'+ seriesid, studyObj )
             .then(res => {
                 console.log(res)
             })

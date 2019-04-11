@@ -18,7 +18,7 @@ class Admin extends Component {
             toggle: false,
             studies:[],
             errMsg:'',
-            currentStudyId:'',
+            currentStudyId :'',
             currentStudy:{},
 
         }
@@ -27,6 +27,7 @@ class Admin extends Component {
     getStudies = () => {
         axios.get('/api/bls')
             .then(res => {
+ 
                 this.setState({
                     studies:res.data
                 })
@@ -78,7 +79,9 @@ class Admin extends Component {
 
     render() {
         const switchArr = this.state.studies.map(study => <option key={study.seriesid} name="seriesid" value={study.seriesid}>{study.seriesid}</option>) 
+        
         switchArr.unshift(<option key='ph' name="seriesid" value='' placeholder='Select Study'>Select Study</option>)
+
         return (
         <div className='admin-form-container'>
             <h3>You found the admin page!!</h3>
