@@ -13,7 +13,7 @@ class Admin extends Component {
                 title:'',
                 subtitle:'',
                 description:'',
-                yAxisLabel:''
+                yAxisName:''
             },
             toggle: false,
             studies:[],
@@ -25,9 +25,8 @@ class Admin extends Component {
     }
 
     getStudies = () => {
-        axios.get('/api/bls')
+        return axios.get('/api/bls')
             .then(res => {
- 
                 this.setState({
                     studies:res.data
                 })
@@ -48,7 +47,8 @@ class Admin extends Component {
         }))
     }
 
-    handleSelect = ({target: {name, value}}) => {
+    handleSelect = async ({target: {name, value}}) => {
+        await this.getStudies()
         const foundStudy = this.state.studies.find(study => study.seriesid === value)
         this.setState({
             currentStudyId:value,
@@ -79,7 +79,7 @@ class Admin extends Component {
 
     render() {
         const switchArr = this.state.studies.map(study => <option key={study.seriesid} name="seriesid" value={study.seriesid}>{study.seriesid}</option>) 
-        
+
         switchArr.unshift(<option key='ph' name="seriesid" value='' placeholder='Select Study'>Select Study</option>)
 
         return (
@@ -100,14 +100,14 @@ class Admin extends Component {
                     <input type="text" name='title' placeholder='Study Title' value={this.state.study.title || ''} onChange={this.handleChange}/>
                     <input type="text" name='subtitle' placeholder='Study Sub-Title' value={this.state.study.subtitle || ''} onChange={this.handleChange}/>
                     <textarea className='submission-field' type="text" name='description' placeholder='Study Description' value={this.state.study.description || ''} onChange={this.handleChange}/>
-                    <input type="text" name='yAxisLabel' placeholder='Enter Y Axis Label' value={this.state.study.yAxisLabel || ''} onChange={this.handleChange}/>
+                    <input type="text" name='yAxisName' placeholder='Enter Y Axis Title' value={this.state.study.yAxisName || ''} onChange={this.handleChange}/>
                 </>
                 :
                 <>
                     <input type="text" name='title' placeholder='Study Title' value={this.state.study.title} onChange={this.handleChange}/>
                     <input type="text" name='subtitle' placeholder='Study Sub-Title' value={this.state.study.subtitle} onChange={this.handleChange}/>
                     <textarea className='submission-field' type="text" name='description' placeholder='Study Description' value={this.state.study.description} onChange={this.handleChange}/>
-                    <input type="text" name='yAxisLabel' placeholder='Enter Y Axis Label' value={this.state.study.yAxisLabel} onChange={this.handleChange}/>
+                    <input type="text" name='yAxisName' placeholder='Enter Y Axis Title' value={this.state.study.yAxisName} onChange={this.handleChange}/>
                 </>
                 }
 
@@ -124,7 +124,7 @@ class Admin extends Component {
                 <input type="text" name='title' placeholder='Study Title' onChange={this.handleChange}/>
                 <input type="text" name='subtitle' placeholder='Study Sub-Title' onChange={this.handleChange}/>
                 <textarea className='submission-field' type="text" name='description' placeholder='Study Description' onChange={this.handleChange}/>
-                <input type="text" name='yAxisLabel' placeholder='Enter Y Axis Label' onChange={this.handleChange}/>
+                <input type="text" name='yAxisName' placeholder='Enter Y Axis Title' onChange={this.handleChange}/>
                 <button>Submit</button>
             </form>
             </>
