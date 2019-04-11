@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import {withChartContext} from './DataProvider'
+import {withDataProvider} from './DataProvider'
 
 class Admin extends Component {
     constructor(){
@@ -136,4 +136,4 @@ class Admin extends Component {
     }
 }
 
-export default withChartContext(Admin)
+export default withDataProvider(Admin)

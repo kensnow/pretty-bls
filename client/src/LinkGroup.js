@@ -2,10 +2,11 @@ import React from 'react'
 
 import BlsLink from "./BlsLink"
 import sidebarData from "./data/sidebarData"
+import {withDataProvider} from './DataProvider'
 
-
-function LinkGroup() {
-    const linkGroup = sidebarData.map((button, i) => <BlsLink key={i} {...button}></BlsLink>)
+function LinkGroup(props) {
+    console.log(props)
+    const linkGroup = props.studies.map((study, i) => <BlsLink key={i} {...study} {...{getDataInfo:props.getDataInfo}}/>)
   
     return (
         <div className="data-group">
@@ -17,4 +18,4 @@ function LinkGroup() {
     )
 }
 
-export default LinkGroup
+export default withDataProvider(LinkGroup)

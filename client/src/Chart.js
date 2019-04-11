@@ -2,7 +2,7 @@
 
 import * as d3 from "d3"
 
-import { withChartContext } from "./DataProvider"
+import { withDataProvider } from "./DataProvider"
 import ChartDetails from "./ChartDetails"
 
 
@@ -10,17 +10,22 @@ class Chart extends Component {
     //need helper functions to parse data & determine chart type
     constructor(props) {
         super(props);
-        this.state = { width: 0, height: 0, data:props }
+        this.state = { 
+            width: 800, 
+            height: 600,
+            seriesid: this.props.location.pathname.split('/')[2] || ''}
         this.createBarChart = this.createBarChart.bind(this)
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
     }
 
     componentDidMount() {
-        this.createBarChart()
-        this.updateWindowDimensions();
-        window.addEventListener("resize", this.updateWindowDimensions)
+        this.state.seriesid && this.createBarChart()
+        console.log(this.props)
+        // this.updateWindowDimensions();
+        // window.addEventListener("resize", this.updateWindowDimensions)
     }
     componentDidUpdate() {
+        console.log(this.props)
         this.createBarChart()
     }
 
@@ -34,12 +39,13 @@ class Chart extends Component {
         d3.selectAll(`svg > *`).remove() //clear previous chart
         
         const node = this.node
-        const dataObj = this.props.data //enable when using api
+        
+        const dataArr = this.props.study.data || [] //enable when using api
 
-         const valuesMap = dataObj.map((d, i )=> (+d.value)+(i/10000)) //get an array of data called valuesMap... i/10000 is a workaround to the unique values issue
-        // const valuesMap = dataObj.map((d )=> (+d.value)) 
+         const valuesMap = dataArr.map((d, i )=> (+d.value)+(i/10000)) //get an array of data called valuesMap... i/10000 is a workaround to the unique values issue
+        // const valuesMap = dataArr.map((d )=> (+d.value)) 
 
-        const freqMap = dataObj.map(d => 
+        const freqMap = dataArr.map(d => 
             {
                 var months = new Array(12);
                     months[0] = "January";
@@ -139,7 +145,7 @@ class Chart extends Component {
 
     render() {
 
-        const {title, subtitle, yScaleName, description, series_id, ...props} = this.props.location.state.button
+        const {title, subtitle, yScaleName, description, series_id, ...props} = this.props.study
 
         return (
             <div className="chart-wrapper">
@@ -162,4 +168,4 @@ class Chart extends Component {
     }
 }
 
-export default withChartContext(Chart)
+export default withDataProvider(Chart)
