@@ -84,19 +84,29 @@ blsRouter.route('/')
             })
                 .then(response => {
 
-                    const studyData = response.data.Results.series[0].data
+                    const newStudyData = response.data.Results.series[0].data
 
-                    const studyObject = {
+                    const studyUpdates = {
                         title,
                         subtitle,
                         yAxisName,
                         description,
-                        seriesid,
-                        data: [...studyData]
+                        seriesid   
                     }
 
-                    Study.findOne({seriesid: seriesid})
-                    .then(foundStudy => console.log(foundStudy))
+                    Study.findOneAndUpdate({seriesid: seriesid}, studyUpdates)
+                    .then(foundStudy => {
+                        foundStudy.data = [...new Set([...foundStudy.data, ...newStudyData])]
+                        foundStudy.save()
+                        .then(finalSave => {
+                            console.log()
+                            res.status(200).send(finalSave)
+                        })
+                        .catch(err => {
+                            res.status(500);
+                            next(err);
+                        })
+                    })
                     .catch(err => {
                         res.status(500)
                         next(err)
