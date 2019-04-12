@@ -55,12 +55,10 @@ studyRouter.route('/:id')
         const id = req.params.id
         const params = req.query
         const currentDate = new Date()
-        console.log(params, currentDate.getFullYear(), id)
         Study.findOne({seriesid: id})
             .then(foundStudy => {
-                // console.log(foundStudy)
+
                 const trimmedStudyArr = foundStudy.data.filter(dataPoint => {
-                    
                     return dataPoint.year >= currentDate.getFullYear() - +params.time
                 })
                 foundStudy.data = trimmedStudyArr

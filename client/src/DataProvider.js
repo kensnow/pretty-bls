@@ -23,7 +23,7 @@ export default class DataProvider extends Component {
         let formatedTimeParam = '?time=3'
         if (timeParam){
             formatedTimeParam = `?time=${timeParam}`
-            console.log(formatedTimeParam)
+
         }
 
         return axios.get('/api/study/' + seriesid + formatedTimeParam,seriesid)
@@ -47,7 +47,7 @@ export default class DataProvider extends Component {
     getMetaData = () => {
         return axios.post('/api/study/', {option: 'meta'})
             .then(response => {
-                console.log(response)
+                
                 this.setState({
                     studies: response.data
                 })
@@ -80,7 +80,6 @@ export default class DataProvider extends Component {
     getDataInfo = (seriesid, timeParam) => {
 
         ///make get data call with series ID, send state down to chart
-        console.log("clicked", seriesid, timeParam)
         timeParam ? this.getData(seriesid, timeParam) : this.getData(seriesid, 3) 
         
     }

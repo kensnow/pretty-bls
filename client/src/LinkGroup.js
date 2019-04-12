@@ -5,7 +5,7 @@ import sidebarData from "./data/sidebarData"
 import {withDataProvider} from './DataProvider'
 
 function LinkGroup(props) {
-    console.log(props)
+
     const linkGroup = props.studies.map((study, i) => <BlsLink key={i} {...study} {...{getDataInfo:props.getDataInfo}}/>)
   
     return (

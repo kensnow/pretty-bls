@@ -147,8 +147,7 @@ class Chart extends Component {
         const {title, subtitle, yScaleName, description, ...props} = this.props.study
 
         const seriesid = this.state.seriesid
-        
-        console.log(seriesid)
+
         return (
             <div className="chart-wrapper">
                 <h3>{title}</h3>

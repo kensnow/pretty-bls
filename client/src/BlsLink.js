@@ -4,7 +4,7 @@ import {withRouter} from "react-router-dom"
 
 
 function BlsLink(props) {
-    console.log(props)
+
     return (
          <button className="link" onClick={() => {
              props.getDataInfo(props.seriesid)
