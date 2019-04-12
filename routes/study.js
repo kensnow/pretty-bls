@@ -53,6 +53,8 @@ studyRouter.route('/')
 studyRouter.route('/:id')
     .get((req, res, next) => {
         const id = req.params.id
+        const params = req.query
+        console.log(params)
         Study.findOne({seriesid: id})
             .then(foundStudy => res.status(200).send(foundStudy))
             .catch(err => {

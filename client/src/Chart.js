@@ -20,12 +20,11 @@ class Chart extends Component {
 
     componentDidMount() {
         this.state.seriesid && this.createBarChart()
-        console.log(this.props)
-        // this.updateWindowDimensions();
-        // window.addEventListener("resize", this.updateWindowDimensions)
+        this.updateWindowDimensions();
+        this.props.getDataInfo(this.state.seriesid)
+        window.addEventListener("resize", this.updateWindowDimensions)
     }
     componentDidUpdate() {
-        console.log(this.props)
         this.createBarChart()
     }
 
@@ -62,7 +61,7 @@ class Chart extends Component {
                     months[11] = "December";
                 return new Date(d.year, months.indexOf(d.periodName))
             })
-        
+        console.log(freqMap)
         valuesMap.reverse() //fix data series from BLS so chart reads left to right
         freqMap.reverse() //fix data series from BLS
 
@@ -139,22 +138,22 @@ class Chart extends Component {
             .attr("y", d => height - yScale(d))
             .delay((d, i) => i * 10)
             .duration(1000)
-            .ease(d3.easeBackInOut)
+            .ease(d3.easeExpInOut)
            
     }
 
     render() {
 
-        const {title, subtitle, yScaleName, description, series_id, ...props} = this.props.study
+        const {title, subtitle, yScaleName, description, seriesid, ...props} = this.props.study
 
         return (
             <div className="chart-wrapper">
                 <h3>{title}</h3>
                 <h5>{subtitle}</h5>
                 <div className="time-button-container">
-                <button className="time-button 3-year" onClick={() => { this.props.getDataInfo(series_id, 3) }} >3 Years</button>
-                <button className="time-button 10-year" onClick={() => { this.props.getDataInfo(series_id, 10) }}>10 years</button>
-                <button className="time-button 20-year" onClick={() => { this.props.getDataInfo(series_id, 20) }}>20 years</button>
+                    <button className="time-button 3-year" onClick={() => { this.props.getDataInfo(seriesid, 3) }} >3 Years</button>
+                    <button className="time-button 10-year" onClick={() => { this.props.getDataInfo(seriesid, 10) }}>10 years</button>
+                    <button className="time-button 20-year" onClick={() => { this.props.getDataInfo(seriesid, 20) }}>20 years</button>
                 </div>
                 <div className="chart" id="chart">
                     <h6 className="yAxis-title">{yScaleName}</h6>

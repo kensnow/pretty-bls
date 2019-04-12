@@ -13,18 +13,20 @@ export default class DataProvider extends Component {
             study:{},
             studies:[]
         }
-
-        //bind prototype functions
-        this.getData = this.getData.bind(this)
-        this.handleClick = this.handleClick.bind(this)
     }
 
     //need to revert state upon each button click
 
-    getData(seriesid, timeParam){
+    getData = (seriesid, timeParam) => {
         let currentYear = (new Date()).getFullYear()
         let startYear = currentYear - timeParam
-        return axios.get('/api/study/' + seriesid,seriesid)
+        let formatedTimeParam = '?time=3'
+        if (timeParam){
+            formatedTimeParam = `?time=${timeParam}`
+            console.log(formatedTimeParam)
+        }
+
+        return axios.get('/api/study/' + seriesid + formatedTimeParam,seriesid)
             .then( response => {
                 this.setState({
                     loading: false,
@@ -75,11 +77,11 @@ export default class DataProvider extends Component {
     }
 
 
-    handleClick = (button, timeParam) => {
+    getDataInfo = (seriesid, timeParam) => {
 
         ///make get data call with series ID, send state down to chart
         console.log("clicked")
-        button.series_id ? this.getData(button.series_id, 3) : this.getData(button, timeParam)
+        timeParam ? this.getData(seriesid, timeParam) : this.getData(seriesid, 3) 
         
     }
 
@@ -90,7 +92,7 @@ export default class DataProvider extends Component {
     render() {       
 
         const chartContext = {
-            getDataInfo: this.handleClick,
+            getDataInfo: this.getDataInfo,
             getNewData: this.getNewData,
             updateData: this.updateData,
             ...this.state
