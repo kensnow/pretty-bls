@@ -80,7 +80,7 @@ export default class DataProvider extends Component {
     getDataInfo = (seriesid, timeParam) => {
 
         ///make get data call with series ID, send state down to chart
-        console.log("clicked")
+        console.log("clicked", seriesid, timeParam)
         timeParam ? this.getData(seriesid, timeParam) : this.getData(seriesid, 3) 
         
     }

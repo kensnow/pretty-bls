@@ -54,9 +54,17 @@ studyRouter.route('/:id')
     .get((req, res, next) => {
         const id = req.params.id
         const params = req.query
-        console.log(params)
+        const currentDate = new Date()
+        console.log(params, currentDate.getFullYear(), id)
         Study.findOne({seriesid: id})
-            .then(foundStudy => res.status(200).send(foundStudy))
+            .then(foundStudy => {
+                // console.log(foundStudy)
+                const trimmedStudyArr = foundStudy.data.filter(dataPoint => {
+                    
+                    return dataPoint.year >= currentDate.getFullYear() - +params.time
+                })
+                foundStudy.data = trimmedStudyArr
+                res.status(200).send(foundStudy)})
             .catch(err => {
                 res.status(500)
                 next(err)

@@ -61,7 +61,7 @@ class Chart extends Component {
                     months[11] = "December";
                 return new Date(d.year, months.indexOf(d.periodName))
             })
-        console.log(freqMap)
+
         valuesMap.reverse() //fix data series from BLS so chart reads left to right
         freqMap.reverse() //fix data series from BLS
 
@@ -144,8 +144,11 @@ class Chart extends Component {
 
     render() {
 
-        const {title, subtitle, yScaleName, description, seriesid, ...props} = this.props.study
+        const {title, subtitle, yScaleName, description, ...props} = this.props.study
 
+        const seriesid = this.state.seriesid
+        
+        console.log(seriesid)
         return (
             <div className="chart-wrapper">
                 <h3>{title}</h3>
