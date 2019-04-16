@@ -4,7 +4,21 @@ const express = require('express')
 const blsRouter = express.Router()
 const Study = require('../models/study')
 
+const cleanObjArr = (dataArr, dataArr2) => {
+    let cleanArr = []
+    
+    arr.forEach(el => {
+        let unique = true
 
+        cleanArr.forEach(el2 => {
+                el.data
+            }
+            
+        )
+        if(unique) cleanArr.push(el)
+    })
+    return cleanArr
+}
 
 const apiAddress = 'https://api.bls.gov/publicAPI/v2/timeseries/data/'
 
@@ -21,7 +35,6 @@ blsRouter.route('/')
     })
     .post((req, res, next) => {
         const {seriesid, endyear, startyear, title, subtitle, yAxisName, description} = req.body
-        console.log(seriesid, endyear, startyear)
         axios({
             method: "post",
             url: apiAddress,
@@ -96,10 +109,11 @@ blsRouter.route('/')
 
                     Study.findOneAndUpdate({seriesid: seriesid}, studyUpdates)
                     .then(foundStudy => {
-                        foundStudy.data = [...new Set([...foundStudy.data, ...newStudyData])]
+                        const monsterArr = [...foundStudy.data, ...newStudyData]
+                        foundStudy.data = cleanObjArr(monsterArr)
                         foundStudy.save()
                         .then(finalSave => {
-                            console.log()
+                
                             res.status(200).send(finalSave)
                         })
                         .catch(err => {

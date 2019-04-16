@@ -57,12 +57,16 @@ studyRouter.route('/:id')
         const currentDate = new Date()
         Study.findOne({seriesid: id})
             .then(foundStudy => {
-
-                const trimmedStudyArr = foundStudy.data.filter(dataPoint => {
-                    return dataPoint.year >= currentDate.getFullYear() - +params.time
-                })
-                foundStudy.data = trimmedStudyArr
-                res.status(200).send(foundStudy)})
+                if (foundStudy === 'all'){
+                    res.status(200).send(foundStudy)
+                } else {
+                    const trimmedStudyArr = foundStudy.data.filter(dataPoint => {
+                        return dataPoint.year >= currentDate.getFullYear() - +params.time
+                    })
+                    foundStudy.data = trimmedStudyArr
+                    res.status(200).send(foundStudy)
+                }
+            })
             .catch(err => {
                 res.status(500)
                 next(err)
