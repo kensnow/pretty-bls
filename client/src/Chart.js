@@ -1,5 +1,5 @@
- import React, { Component } from 'react'
-
+import React, { Component } from 'react'
+import {withRouter} from 'react-router-dom'
 import * as d3 from "d3"
 
 import { withDataProvider } from "./DataProvider"
@@ -14,27 +14,33 @@ class Chart extends Component {
             width: 800, 
             height: 600,
             seriesid: this.props.location.pathname.split('/')[2] || ''}
-        this.createBarChart = this.createBarChart.bind(this)
-        this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
+
     }
 
-    componentDidMount() {
-        this.state.seriesid && this.createBarChart()
+    componentDidMount (){
+        this.props.getData(this.state.seriesid, this.props.location.search)
         this.updateWindowDimensions();
-        this.props.getDataInfo(this.state.seriesid)
+        this.state.seriesid && this.createBarChart()
         window.addEventListener("resize", this.updateWindowDimensions)
     }
     componentDidUpdate() {
         this.createBarChart()
+        console.log(this.props.location.search)
     }
 
-    updateWindowDimensions() {
+    timeSeriesButtonClick = async (timeframe) => {
+        await this.props.history.push(timeframe)
+        await this.props.getData(this.state.seriesid, this.props.location.search)
+        await this.createBarChart()
+    }
+
+    updateWindowDimensions = () => {
         this.setState({
             width: document.getElementById('chart').clientWidth, //get width from container
             height: document.getElementById('chart').clientHeight
         })
     }
-    createBarChart() {
+    createBarChart = () => {
         d3.selectAll(`svg > *`).remove() //clear previous chart
         
         const node = this.node
@@ -153,9 +159,9 @@ class Chart extends Component {
                 <h3>{title}</h3>
                 <h5>{subtitle}</h5>
                 <div className="time-button-container">
-                    <button className="time-button 3-year" onClick={() => { this.props.getDataInfo(seriesid, 3) }} >3 Years</button>
-                    <button className="time-button 10-year" onClick={() => { this.props.getDataInfo(seriesid, 10) }}>10 years</button>
-                    <button className="time-button 20-year" onClick={() => { this.props.getDataInfo(seriesid, 20) }}>20 years</button>
+                    <button className="time-button 3-year" onClick={() => this.timeSeriesButtonClick('?time=3')} >3 Years</button>
+                    <button className="time-button 10-year" onClick={() => this.timeSeriesButtonClick('?time=10')}>10 years</button>
+                    <button className="time-button 20-year" onClick={() => this.timeSeriesButtonClick('?time=20')}>20 years</button>
                 </div>
                 <div className="chart" id="chart">
                     <h6 className="yAxis-title">{yScaleName}</h6>
@@ -169,4 +175,4 @@ class Chart extends Component {
     }
 }
 
-export default withDataProvider(Chart)
+export default withRouter(withDataProvider(Chart))

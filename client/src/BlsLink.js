@@ -7,7 +7,7 @@ function BlsLink(props) {
 
     return (
          <button className="link" onClick={() => {
-             props.getDataInfo(props.seriesid)
+             props.getData(props.seriesid)
              props.history.push(`/study/${props.seriesid}`)
              }}>{props.title}</button>
     )

@@ -54,6 +54,7 @@ studyRouter.route('/:id')
     .get((req, res, next) => {
         const id = req.params.id
         const params = req.query
+        console.log(id, params)
         const currentDate = new Date()
         Study.findOne({seriesid: id})
             .then(foundStudy => {

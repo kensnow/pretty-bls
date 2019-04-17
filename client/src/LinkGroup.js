@@ -6,7 +6,7 @@ import {withDataProvider} from './DataProvider'
 
 function LinkGroup(props) {
 
-    const linkGroup = props.studies.map((study, i) => <BlsLink key={i} {...study} {...{getDataInfo:props.getDataInfo}}/>)
+    const linkGroup = props.studies.map((study, i) => <BlsLink key={i} {...study} {...{getData:props.getData}}/>)
   
     return (
         <div className="data-group">
