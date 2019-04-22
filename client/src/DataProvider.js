@@ -18,7 +18,7 @@ export default class DataProvider extends Component {
     //need to revert state upon each button click
 
     getData = (seriesid, timeParam = '?time=3') => {
-
+        console.log(timeParam)
         return axios.get('/api/study/' + seriesid + timeParam,seriesid)
             .then( response => {
                 this.setState({
@@ -33,9 +33,29 @@ export default class DataProvider extends Component {
                    errMsg:"Cannot get data"     
             }))
         
-    }//end real get data
-    
-    //get component meta data
+    }
+
+    dataCheck = (query) => {
+        //this function checks if the query is less than the data range already stored in state, returns a true or false
+        const currentDate = new Date
+        const currentYear = currentDate.getFullYear()
+        const oldestDataYear = this.state.study.data ? this.state.study.data[this.state.study.data.length-1].year : ''
+        const [_,queryNum] = query.split('=')
+        console.log(oldestDataYear, currentYear, +queryNum)
+        return oldestDataYear < currentYear - +queryNum
+
+    }
+
+    filterStateData = (query) => {
+        //this function takes the query, and returns the requested data from state
+        const currentDate = new Date
+        const currentYear = currentDate.getFullYear()
+        const [_,queryNum] = query.split('=')
+        const beginYear = currentYear - queryNum
+        console.log(currentYear, beginYear)
+
+        return this.state.study.data.filter(dataObj => dataObj.year <= currentYear && dataObj.year >= beginYear)
+    }
 
     getMetaData = () => {
         return axios.post('/api/study/', {option: 'meta'})
@@ -79,6 +99,8 @@ export default class DataProvider extends Component {
             getData: this.getData,
             getNewData: this.getNewData,
             updateData: this.updateData,
+            filterStateData: this.filterStateData,
+            dataCheck: this.dataCheck,
             ...this.state
         }
 

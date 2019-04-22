@@ -1,13 +1,15 @@
 import React from 'react'
-
+import {withRouter} from 'react-router-dom'
 import BlsLink from "./BlsLink"
 import sidebarData from "./data/sidebarData"
 import {withDataProvider} from './DataProvider'
 
 function LinkGroup(props) {
 
-    const linkGroup = props.studies.map((study, i) => <BlsLink key={i} {...study} {...{getData:props.getData}}/>)
-  
+    const linkGroup = props.studies.map((study, i) => <button key={i} className='link button' onClick={()=> {
+        props.history.push(`/study/${study.seriesid}`)
+        }}>{study.title} </button>)
+
     return (
         <div className="data-group">
             <h3>Data Series</h3>
@@ -18,4 +20,4 @@ function LinkGroup(props) {
     )
 }
 
-export default withDataProvider(LinkGroup)
+export default withRouter(withDataProvider(LinkGroup))

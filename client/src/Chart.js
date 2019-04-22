@@ -13,41 +13,50 @@ class Chart extends Component {
         this.state = { 
             width: 800, 
             height: 600,
-            seriesid: this.props.location.pathname.split('/')[2] || ''}
+            seriesid: this.props.location.pathname.split('/')[2] || '',
+            query: '?time=3'
+        }
 
     }
 
-    componentDidMount (){
-        this.props.getData(this.state.seriesid, this.props.location.search)
-        this.updateWindowDimensions();
-        this.state.seriesid && this.createBarChart()
+    componentDidMount = async () => {
+        await this.props.getData(this.state.seriesid)
+        await this.updateWindowDimensions();
+        await this.state.seriesid && this.createBarChart(this.props.study.data)
         window.addEventListener("resize", this.updateWindowDimensions)
     }
-    componentDidUpdate() {
-        this.createBarChart()
-        console.log(this.props.location.search)
+    componentDidUpdate = () => {
+        const filteredData = this.props.filterStateData(this.state.query)
+        console.log(this.props.dataCheck(this.state.query))
+        this.createBarChart(this.props.study.data)
+      
+        // console.log(this.props.location.search)
     }
 
     timeSeriesButtonClick = async (timeframe) => {
         await this.props.history.push(timeframe)
-        await this.props.getData(this.state.seriesid, this.props.location.search)
-        await this.createBarChart()
+        await this.setState({
+            query: timeframe
+        })
+        console.log(this.props.dataCheck(this.state.query))
+        await this.props.getData(this.state.seriesid, this.state.query)
+        await this.createBarChart(this.props.study.data)
     }
-
+   
     updateWindowDimensions = () => {
         this.setState({
             width: document.getElementById('chart').clientWidth, //get width from container
             height: document.getElementById('chart').clientHeight
         })
     }
-    createBarChart = () => {
+    createBarChart = (arrDat) => {
         d3.selectAll(`svg > *`).remove() //clear previous chart
         
         const node = this.node
         
-        const dataArr = this.props.study.data || [] //enable when using api
+        const dataArr = arrDat || [] //enable when using api
 
-         const valuesMap = dataArr.map((d, i )=> (+d.value)+(i/10000)) //get an array of data called valuesMap... i/10000 is a workaround to the unique values issue
+        const valuesMap = dataArr.map((d, i )=> (+d.value)+(i/10000)) //get an array of data called valuesMap... i/10000 is a workaround to the unique values issue
         // const valuesMap = dataArr.map((d )=> (+d.value)) 
 
         const freqMap = dataArr.map(d => 
