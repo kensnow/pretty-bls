@@ -39,8 +39,8 @@ class Chart extends Component {
             query: timeframe
         })
         console.log(this.props.dataCheck(this.state.query))
-        await this.props.getData(this.state.seriesid, this.state.query)
-        await this.createBarChart(this.props.study.data)
+        // await this.props.getData(this.state.seriesid, this.state.query)
+        // await this.createBarChart(this.props.study.data)
     }
    
     updateWindowDimensions = () => {
