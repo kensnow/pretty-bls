@@ -14,23 +14,40 @@ class Chart extends Component {
             width: 800, 
             height: 600,
             seriesid: this.props.location.pathname.split('/')[2] || '',
-            query: '?time=3'
+            query: '?time=3',
         }
 
     }
 
     componentDidMount = async () => {
-        await this.props.getData(this.state.seriesid)
-        await this.updateWindowDimensions();
-        await this.state.seriesid && this.createBarChart(this.props.study.data)
-        window.addEventListener("resize", this.updateWindowDimensions)
+
+        await this.props.location.search && await this.setState({
+            width: document.getElementById('chart').clientWidth, //get width from container
+            height: document.getElementById('chart').clientHeight,
+            query:this.props.location.search
+        })
+        this.getDataRouter(this.state.query)
+
+        // window.addEventListener("resize", this.updateWindowDimensions)
     }
-    componentDidUpdate = () => {
-        const filteredData = this.props.filterStateData(this.state.query)
-        console.log(this.props.dataCheck(this.state.query))
-        this.createBarChart(this.props.study.data)
-      
-        // console.log(this.props.location.search)
+
+
+
+    // updateWindowDimensions = () => {
+    //     this.setState({
+    //         width: document.getElementById('chart').clientWidth, //get width from container
+    //         height: document.getElementById('chart').clientHeight
+    //     })
+    // }
+
+    getDataRouter = async (query) => {
+        if (this.props.dataCheck(query)){
+            const filteredData = await this.props.filterStateData(query)
+            this.createBarChart(filteredData)
+        } else {
+            await this.props.getData(this.state.seriesid, query)
+            await this.state.seriesid && this.createBarChart(this.props.study.data)
+        }
     }
 
     timeSeriesButtonClick = async (timeframe) => {
@@ -38,6 +55,7 @@ class Chart extends Component {
         await this.setState({
             query: timeframe
         })
+        this.getDataRouter(timeframe)
         console.log(this.props.dataCheck(this.state.query))
         // await this.props.getData(this.state.seriesid, this.state.query)
         // await this.createBarChart(this.props.study.data)
@@ -158,7 +176,6 @@ class Chart extends Component {
     }
 
     render() {
-
         const {title, subtitle, yScaleName, description, ...props} = this.props.study
 
         const seriesid = this.state.seriesid
