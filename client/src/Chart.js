@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import * as d3 from "d3"
 
 import { withDataProvider } from "./DataProvider"
@@ -10,173 +10,168 @@ class Chart extends Component {
     //need helper functions to parse data & determine chart type
     constructor(props) {
         super(props);
-        this.state = { 
-            width: 800, 
+        this.state = {
+            width: 800,
             height: 600,
+            margin: {
+                top:40,
+                bottom:100,
+                left:80,
+                right:70
+            },
             seriesid: this.props.location.pathname.split('/')[2] || '',
             query: '?time=3',
+            chartSettings:{
+                color1:'#341C1C',
+                color2:'#ADFCF9',
+                scaleMod:.05
+            }
         }
 
     }
 
-    componentDidMount = async () => {
 
-        await this.props.location.search && await this.setState({
-            width: document.getElementById('chart').clientWidth, //get width from container
-            height: document.getElementById('chart').clientHeight,
-            query:this.props.location.search
-        })
-        this.getDataRouter(this.state.query)
+    componentDidMount = () => {
 
-        // window.addEventListener("resize", this.updateWindowDimensions)
+        this.setState({
+            width: document.getElementById('chart').clientWidth - this.state.margin.left - this.state.margin.right, //get width from container
+            height: document.getElementById('chart').clientHeight - this.state.margin.top - this.state.margin.bottom, //get height from container
+            query: this.props.location.search || '?time=3'
+        },
+            () => this.getDataRouter(this.state.query)
+        )
     }
 
-
-
-    // updateWindowDimensions = () => {
-    //     this.setState({
-    //         width: document.getElementById('chart').clientWidth, //get width from container
-    //         height: document.getElementById('chart').clientHeight
-    //     })
-    // }
-
     getDataRouter = async (query) => {
-        if (this.props.dataCheck(query)){
+        if (this.props.dataCheck(query)) {
             const filteredData = await this.props.filterStateData(query)
-            this.createBarChart(filteredData)
+            this.createBarChart(filteredData, this.props.study, this.state.chartSettings)
         } else {
             await this.props.getData(this.state.seriesid, query)
-            await this.state.seriesid && this.createBarChart(this.props.study.data)
+            await this.state.seriesid && this.createBarChart(this.props.study.data, this.props.study, this.state.chartSettings)
         }
     }
 
     timeSeriesButtonClick = async (timeframe) => {
+        d3.selectAll(`svg > *`).remove() //clear previous chart
         await this.props.history.push(timeframe)
         await this.setState({
             query: timeframe
         })
         this.getDataRouter(timeframe)
-        console.log(this.props.dataCheck(this.state.query))
-        // await this.props.getData(this.state.seriesid, this.state.query)
-        // await this.createBarChart(this.props.study.data)
     }
-   
-    updateWindowDimensions = () => {
-        this.setState({
-            width: document.getElementById('chart').clientWidth, //get width from container
-            height: document.getElementById('chart').clientHeight
-        })
-    }
-    createBarChart = (arrDat) => {
-        d3.selectAll(`svg > *`).remove() //clear previous chart
-        
+    createBarChart = (data, metaData, settings) => {
+        //establish chart globals
         const node = this.node
-        
-        const dataArr = arrDat || [] //enable when using api
+        const width = this.state.width
+        const height = this.state.height
+        const margin = this.state.margin
+        const canvas = d3.select(node)
 
-        const valuesMap = dataArr.map((d, i )=> (+d.value)+(i/10000)) //get an array of data called valuesMap... i/10000 is a workaround to the unique values issue
-        // const valuesMap = dataArr.map((d )=> (+d.value)) 
+        //useful data info
+        const minVal = d3.min(data, d => d.value)
+        const maxVal = d3.max(data, d => d.value)
 
-        const freqMap = dataArr.map(d => 
-            {
-                var months = new Array(12);
-                    months[0] = "January";
-                    months[1] = "February";
-                    months[2] = "March";
-                    months[3] = "April";
-                    months[4] = "May";
-                    months[5] = "June";
-                    months[6] = "July";
-                    months[7] = "August";
-                    months[8] = "September";
-                    months[9] = "October";
-                    months[10] = "November";
-                    months[11] = "December";
-                return new Date(d.year, months.indexOf(d.periodName))
-            })
+        const firstEl = data[0] //most recent element
+        const lastEl = data[data.length-1] //oldest element
 
-        valuesMap.reverse() //fix data series from BLS so chart reads left to right
-        freqMap.reverse() //fix data series from BLS
+        //useful functions
+        const parseTime = d3.timeParse('%B, 0, %Y')
+        const t = d3.transition().duration(750)
 
-        const dataMax = d3.max(valuesMap)
-        const dataMin = d3.min(valuesMap)
-        //parameters
-        const margin = {top: 20, right: 20, bottom: 20, left: 50}
-        const height = this.state.height - margin.top - margin.bottom
-        const width = this.state.width - margin.left - margin.right
-        
-        //set up scales to chart fills correctly, use linear for percent charts (0-100) and
-        // percent change charts
-            
+        //append new data group
+        const g = canvas.append('g')
+            .attr('transform', `translate(${margin.left}, ${margin.top})`)
 
-        const yScale = d3.scaleLinear()
-            .domain([dataMin - (dataMin *.02), dataMax +(dataMax * .02)]) //lift floor of data off 2%
-            .range([0, height])
+        //set up x and y scales
+        // const x = d3.scaleTime()
+        //     .domain([parseTime(`${lastEl.periodName}, 0, ${lastEl.year}`),parseTime(`${firstEl.periodName}, 0, ${firstEl.year}`)])
+        //     .range([0, width])
 
-        const yAxisValues = d3.scaleLinear()
-            .domain([dataMin - (dataMin *.02), dataMax +(dataMax * .02)])
-            .range([height,0]) //need to reverse to correct scale drawing
-
-        const yAxisTicks = d3.axisLeft(yAxisValues)
-            .ticks(20)
-
-        const xScaleBand = d3.scaleBand()
-            .domain(valuesMap)
-            .padding(.1)
-            .range([0, width])
-
-        const xAxisValues = d3.scaleTime()
-            .domain([freqMap[0], freqMap[freqMap.length-1]])
-            .range([0, width])
-
-        const xAxisTicks = d3.axisBottom(xAxisValues)
-            .ticks(width <= 400 ? 4 : 12) //dynamically change #ticks based on size
-    
-        //dynamically change bar colors based on size
         const colors = d3.scaleLinear()
-            .domain([dataMin, dataMax])
-            .range(['#341C1C', '#ADFCF9'])
+            .domain([minVal, maxVal])
+            .range([settings.color1, settings.color2])
 
-        const myChart = d3.select(node)
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
-          .append('g')
-          .selectAll('rect')
-            .data(valuesMap)
-          .enter()
-          .append('rect')
-          
-            .attr('transform', `translate(${margin.left},${margin.right})`)
+        const xBand = d3.scaleBand()
+            .domain(data.map(d => parseTime(`${d.periodName}, 0, ${d.year}`)).reverse())
+            .range([0, width])
+            .paddingInner(.2)
+            .paddingOuter(.2)
+
+        //TODO make y scale dynamically based on data range
+        const y = d3.scaleLinear()
+            .domain([minVal - minVal * settings.scaleMod, maxVal + maxVal * settings.scaleMod])
+            .range([height, 0])
        
-            .attr("fill", (d) => colors(d))
-            .attr("width", (d) => xScaleBand.bandwidth()) // calculate width of each bar
-            .attr("height", (d) => yScale(d))
-            .attr("x", (d,i) => xScaleBand(d)) //spread bars out using width and offset
-
-            .attr('y', height)
-            .attr('class', 'bar')
-
-        const yGuide = d3.select(node).append('g')
-            .attr('transform', 'translate(50,20)')
-            .call(yAxisTicks)
+        //set up axes
+        const xAxisCall = d3.axisBottom(xBand)
+            .ticks(10)
+            .tickValues()
             
 
-        const xGuide = d3.select(node).append('g')
-            .attr('transform', `translate(50,${height + 20})`)
-            .call(xAxisTicks)
-            
+        const yAxisCall = d3.axisLeft(y)
+            .ticks(10)
 
-        myChart.transition()
-            .attr("height", (d) => yScale(d))
-            .attr("y", d => height - yScale(d))
-            .delay((d, i) => i * 10)
-            .duration(1000)
-            .ease(d3.easeExpInOut)
-           
+
+        const xAxisGroup = g.append('g')
+            .attr('class', 'x-axis')
+            .attr('transform', `translate(0, ${height})`)
+            .call(xAxisCall)
+            .selectAll('text')
+                .attr('y', '10')
+                .attr('x', '-5')
+                .attr('font-size', '14px')
+                .attr('text-anchor', 'middle')
+
+        const yAxisGroup = g.append('g')
+            .attr('class', 'y-axis')
+            .call(yAxisCall)
+            .selectAll('text')
+                .attr('font-size', '14px')
+
+        //render axis ticks
+        xAxisGroup.transition(t)
+        yAxisGroup.transition(t)
+
+
+        //render axes labels
+        //x-axis label 
+        g.append('text')
+            .attr('class', 'x-axis label')
+            .attr('x', width/2)
+            .attr('y', height + 40)
+            .attr('font-size', '20px')
+            .attr('text-anchor', 'middle')
+            .text(`${this.state.query.split('=')[1]} years`)
+
+        g.append('text')
+            .attr('class', 'y-axis label')
+            .attr('x', -(height / 2))
+            .attr('y', -25)
+            .attr('font-size', '20px')
+            .attr('text-anchor', 'middle')
+            .attr('transform', 'rotate(-90)')
+            .text(metaData.yAxisName)
+        //render bars to chart
+        const bars = g.selectAll('rect')
+            .data(data, d => d._id)
+
+        bars.enter()
+            .append('rect')
+                .attr('class', 'bar')
+                .attr('fill', d => colors(d.value))
+                .attr('x', d => xBand(parseTime(`${d.periodName}, 0, ${d.year}`)))
+                .attr('y', y(minVal - minVal * settings.scaleMod))
+                .attr('height', 0)
+                .attr('width', xBand.bandwidth())
+            .transition(t)
+                .attr('y', d => y(d.value))
+                .attr('height', d => height - y(d.value))
     }
+
 
     render() {
-        const {title, subtitle, yScaleName, description, ...props} = this.props.study
+        const { title, subtitle, yScaleName, description, ...props } = this.props.study
 
         const seriesid = this.state.seriesid
 
@@ -191,7 +186,7 @@ class Chart extends Component {
                 </div>
                 <div className="chart" id="chart">
                     <h6 className="yAxis-title">{yScaleName}</h6>
-                    <svg ref={node => this.node = node} width={this.state.width} height={this.state.height}></svg>
+                    <svg ref={node => this.node = node} width={this.state.width + this.state.margin.left + this.state.margin.right} height={this.state.height + this.state.margin.top + this.state.margin.bottom}></svg>
                 </div>
 
                 <ChartDetails title={title} subtitle={subtitle} description={description} />
@@ -199,6 +194,7 @@ class Chart extends Component {
 
         )
     }
+
 }
 
 export default withRouter(withDataProvider(Chart))
