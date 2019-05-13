@@ -60,7 +60,7 @@ class Chart extends Component {
         })
         this.getDataRouter(timeframe)
     }
-    createBarChart = (data, metaData, settings) => {
+    createBarChart = (data, metaData, chartSettings) => {
         //establish chart globals
         const node = this.node
         const width = this.state.width
@@ -77,6 +77,7 @@ class Chart extends Component {
 
         //useful functions
         const parseTime = d3.timeParse('%B, 0, %Y')
+        const formatTime = d3.timeFormat('%b %Y')
         const t = d3.transition().duration(750)
 
         //append new data group
@@ -84,13 +85,13 @@ class Chart extends Component {
             .attr('transform', `translate(${margin.left}, ${margin.top})`)
 
         //set up x and y scales
-        // const x = d3.scaleTime()
-        //     .domain([parseTime(`${lastEl.periodName}, 0, ${lastEl.year}`),parseTime(`${firstEl.periodName}, 0, ${firstEl.year}`)])
-        //     .range([0, width])
+        const x = d3.scaleTime()
+            .domain([parseTime(`${lastEl.periodName}, 0, ${lastEl.year}`),parseTime(`${firstEl.periodName}, 0, ${firstEl.year}`)])
+            .range([0, width])
 
         const colors = d3.scaleLinear()
             .domain([minVal, maxVal])
-            .range([settings.color1, settings.color2])
+            .range([chartSettings.color1, chartSettings.color2])
 
         const xBand = d3.scaleBand()
             .domain(data.map(d => parseTime(`${d.periodName}, 0, ${d.year}`)).reverse())
@@ -100,14 +101,12 @@ class Chart extends Component {
 
         //TODO make y scale dynamically based on data range
         const y = d3.scaleLinear()
-            .domain([minVal - minVal * settings.scaleMod, maxVal + maxVal * settings.scaleMod])
+            .domain([minVal - minVal * chartSettings.scaleMod, maxVal + maxVal * chartSettings.scaleMod])
             .range([height, 0])
        
         //set up axes
-        const xAxisCall = d3.axisBottom(xBand)
-            .ticks(10)
-            .tickValues()
-            
+        const xAxisCall = d3.axisBottom(x)
+            .ticks(10)            
 
         const yAxisCall = d3.axisLeft(y)
             .ticks(10)
@@ -161,7 +160,7 @@ class Chart extends Component {
                 .attr('class', 'bar')
                 .attr('fill', d => colors(d.value))
                 .attr('x', d => xBand(parseTime(`${d.periodName}, 0, ${d.year}`)))
-                .attr('y', y(minVal - minVal * settings.scaleMod))
+                .attr('y', y(minVal - minVal * chartSettings.scaleMod))
                 .attr('height', 0)
                 .attr('width', xBand.bandwidth())
             .transition(t)
