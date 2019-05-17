@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import * as d3 from "d3"
 
-import { withDataProvider } from "./DataProvider"
+import { withDataProvider } from "./providers/DataProvider"
 import ChartDetails from "./ChartDetails"
 
 

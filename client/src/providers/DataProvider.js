@@ -1,6 +1,6 @@
 import React, { Component, createContext } from 'react'
 import axios from "axios"
-import sidebarData from "./data/sidebarData"
+import sidebarData from "../data/sidebarData"
 
 export const {Consumer, Provider} = createContext()
 
@@ -19,7 +19,7 @@ export default class DataProvider extends Component {
 
     getData = (seriesid, timeParam = '?time=3') => {
         console.log(timeParam)
-        return axios.get('/api/study/' + seriesid + timeParam,seriesid)
+        return axios.get('/study/' + seriesid + timeParam,seriesid)
             .then( response => {
                 this.setState({
                     loading: false,
@@ -59,7 +59,7 @@ export default class DataProvider extends Component {
     }
 
     getMetaData = () => {
-        return axios.post('/api/study/', {option: 'meta'})
+        return axios.post('/study/', {option: 'meta'})
             .then(response => {
                 
                 this.setState({

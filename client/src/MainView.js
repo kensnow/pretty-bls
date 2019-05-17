@@ -2,11 +2,14 @@ import React from 'react'
 import {Route} from "react-router-dom"
 import Home from "./Home"
 import About from "./About"
-import {Consumer} from "./DataProvider"
+import {Consumer} from "./providers/DataProvider"
 import Chart from "./Chart"
 import Loading from "./Loading"
 import ErrMsg from "./ErrMsg"
 import Admin from './Admin'
+import SignUp from './SignUp'
+import LogIn from './LogIn'
+
 function MainView() {
     return (
             <div className="main">
@@ -14,7 +17,9 @@ function MainView() {
             
                 <Route exact path="/" component={Home} />
                 <Route path="/about" component={About} />
-                <Route path="/admin" component={Admin}/>
+                <Route path="/admin" component={Admin} />
+                <Route path='/signup' component={SignUp} />
+                <Route path='/login' component={LogIn} />
                 <Consumer>
                     {value => 
                         <Loading loading={value.loading}>

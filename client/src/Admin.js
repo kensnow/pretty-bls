@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import {withDataProvider} from './DataProvider'
+import {withDataProvider} from './providers/DataProvider'
 
 class Admin extends Component {
     constructor(){

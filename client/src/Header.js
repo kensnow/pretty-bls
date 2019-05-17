@@ -9,6 +9,8 @@ function Header() {
             <div className="linkbar">
                 <Link className="link" to="/">Home</Link>
                 <Link className="link" to="/about">About</Link>
+                <Link className='link' to='/login'>Log In</Link>
+                <Link className='link' to='/signup'>Sign Up</Link>
                 <a className="link" href="/#sidebar">Data</a>
             </div>
         </nav>

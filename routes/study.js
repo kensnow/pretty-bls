@@ -93,4 +93,4 @@ studyRouter.route('/:id')
             })
     })
 
-    module.exports = studyRouter
+module.exports = studyRouter
