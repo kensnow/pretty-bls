@@ -1,5 +1,5 @@
 import React from 'react'
-import {Route} from "react-router-dom"
+import {Route, Switch} from "react-router-dom"
 import Home from "./Home"
 import About from "./About"
 import {Consumer} from "./providers/DataProvider"
@@ -15,7 +15,7 @@ function MainView() {
     return (
             <div className="main">
 
-            
+            <Switch>
                 <Route exact path="/" component={Home} />
                 <AdminRoute path="/about" component={About} />
                 <Route path="/admin" component={Admin} />
@@ -31,6 +31,8 @@ function MainView() {
                     }
                     
                 </Consumer>
+            </Switch>
+
             </div>
     )
 }

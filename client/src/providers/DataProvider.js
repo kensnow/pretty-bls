@@ -42,8 +42,9 @@ export default class DataProvider extends Component {
         
     }
 
-    dataCheck = (query) => {
+    dataCheck = (query, seriesId) => {
         //this function checks if the query is less than the data range already stored in state, returns a true or false
+        if (this.state.study.seriesid !== seriesId) {return false}
         const currentDate = new Date
         const currentYear = currentDate.getFullYear()
         const oldestDataYear = this.state.study.data ? this.state.study.data[this.state.study.data.length-1].year : currentYear

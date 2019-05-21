@@ -26,7 +26,12 @@ class Chart extends Component {
                 color2:'#ADFCF9',
                 scaleMod:.05
             },
-            toolTip:{}
+            toolTip:{
+                hover:{},
+                hi:[],
+                lo:[],
+                avg:''
+            }
         }
 
     }
@@ -39,12 +44,12 @@ class Chart extends Component {
             height: document.getElementById('chart').clientHeight - this.state.margin.top - this.state.margin.bottom, //get height from container
             query: this.props.location.search || '?time=3'
         },
-            () => this.getDataRouter(this.state.query)
+            () => this.getDataRouter(this.state.query, this.state.seriesid)
         )
     }
 
-    getDataRouter = async (query) => {
-        if (this.props.dataCheck(query)) {
+    getDataRouter = async (query, seriesId) => {
+        if (this.props.dataCheck(query, seriesId)) {
             const filteredData = await this.props.filterStateData(query)
             this.createBarChart(filteredData, this.props.study, this.state.chartSettings)
         } else {
@@ -60,6 +65,18 @@ class Chart extends Component {
             query: timeframe
         })
         this.getDataRouter(timeframe)
+    }
+
+    updateToolTip = (data) => {
+        this.setState( ps => ({
+            toolTip:{
+                hover: ps.toolTip.hover,
+                hi: data.filter(datObj => datObj.value === d3.max(data, d => d.value)),
+                lo: data.filter(datObj => datObj.value === d3.min(data, d => d.value)),
+                avg: Math.round(d3.mean(data, d => d.value) * 100)/100
+            }
+        }))
+        
     }
     createBarChart = (data, metaData, chartSettings) => {
         //establish chart globals
@@ -80,6 +97,8 @@ class Chart extends Component {
         const parseTime = d3.timeParse('%B, 0, %Y')
         const formatTime = d3.timeFormat('%b %Y')
         const t = d3.transition().duration(750)
+        
+        this.updateToolTip(data)
 
         //append new data group
         const g = canvas.append('g')
@@ -163,8 +182,8 @@ class Chart extends Component {
                 .attr('y', y(minVal - minVal * chartSettings.scaleMod))
                 .attr('height', 0)
                 .attr('width', xBand.bandwidth())
-                .on('mouseover', d => this.setState({toolTip: d}))
-                .on('mouseout',  d => this.setState({toolTip: {}}))
+                .on('mouseover', d => this.setState(ps => ({toolTip:{...ps.toolTip, hover: d}})))
+                .on('mouseout',  d => this.setState(ps => ({toolTip:{...ps.toolTip, hover: {}}})))
             .transition(t)
                 .attr('y', d => y(d.value))
                 .attr('height', d => height - y(d.value))
@@ -176,6 +195,8 @@ class Chart extends Component {
 
         const seriesid = this.state.seriesid
 
+        const hiVals = this.state.toolTip.hi.map((el, i) => i === 0 ? <><p>value:</p><p>{el.value}</p><p>date:</p><p>{`${el.periodName.substring(0, 3)}, ${el.year}`}</p></> : <><p></p><p>{`${el.periodName.substring(0, 3)}, ${el.year}`}</p></>)
+        const loVals = this.state.toolTip.lo.map((el, i) => i === 0 ? <><p>value:</p><p>{el.value}</p><p>date:</p><p>{`${el.periodName.substring(0, 3)}, ${el.year}`}</p></> : <><p></p><p>{`${el.periodName.substring(0, 3)}, ${el.year}`}</p></>)
         return (
             <div className="chart-wrapper">
                 <h3>{title}</h3>
@@ -190,12 +211,25 @@ class Chart extends Component {
                     <h6 className="yAxis-title">{yScaleName}</h6>
                     <svg ref={node => this.node = node} width={this.state.width + this.state.margin.left + this.state.margin.right} height={this.state.height + this.state.margin.top + this.state.margin.bottom}></svg>
                         <div className='data-hud'>
-                        {this.state.toolTip.value && 
+                        <h5>period hi</h5>
+                        <div className="tool-tip">
+                           {hiVals}
+                        </div>
+                        <h5>period lo</h5>
+                        <div className="tool-tip">
+                            {loVals}
+                        </div>
+                        <h5>period mean</h5>
+                        <div className="tool-tip">
+                            <p>value:</p><p>{this.state.toolTip.avg}</p>
+                        </div>
+                        {this.state.toolTip.hover.value && 
                         <>
-                            <div className="tool-tip">
-                                <p>value:</p><p>{this.state.toolTip.value}</p>
-                                <p>period:</p><p>{`${this.state.toolTip.periodName.substring(0, 3)}, ${this.state.toolTip.year}`}</p>
-                            </div>
+                        <h5>target</h5>
+                        <div className="tool-tip">
+                            <p>value:</p><p>{this.state.toolTip.hover.value}</p>
+                            <p>date:</p><p>{`${this.state.toolTip.hover.periodName.substring(0, 3)}, ${this.state.toolTip.hover.year}`}</p>
+                        </div>
                         </>
                     }
                     </div>

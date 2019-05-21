@@ -113,10 +113,14 @@ footer{
     
 }
 
-.tool-tip{
+.data-hud{
     position: absolute;
     top:0;
     right:4px;
+}
+
+.tool-tip{
+
     /* padding: 20px; */
     display:grid;
     grid-template: auto auto / 65px 100px;
