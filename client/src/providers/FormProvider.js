@@ -4,7 +4,8 @@ export default class FormHandler extends Component {
     constructor(props){
         super(props);
         this.state = {
-            inputs: props.inputs
+            inputs: props.inputs,
+            errMsg:''
         }
     }
 
@@ -19,9 +20,22 @@ export default class FormHandler extends Component {
         ))
     }
 
+    clearInputs = () => {
+        this.setState({
+            inputs: {},
+            errMsg: ''
+        })
+    }
+
     handleSubmit = (e) => {
         e.preventDefault()
         this.props.submit(this.state.inputs)
+            .then(() => this.clearInputs())
+            .catch(err => {
+                this.setState({
+                    errMsg: err.data
+                })
+            })
     }
 
     render() {

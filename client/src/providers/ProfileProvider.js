@@ -15,14 +15,19 @@ export default class ProfileProvider extends Component {
         super()
         this.state = {
             user:JSON.parse(localStorage.getItem('user')) || {},
-            email:'',
-            password:'',
             token: localStorage.getItem('token') || '',
             errMsg:''
         }
     }
 
+    clearErrors = () => {
+        this.setState({
+            errMsg:''
+        })
+    }
+
     logIn = (userDat) => {
+        this.clearErrors()
         return profileAxios.post('/auth/login', {...userDat})   
             .then(res => {
                 const {user, token} = res.data
@@ -31,15 +36,19 @@ export default class ProfileProvider extends Component {
                 this.setState({
                     user,
                     token,
-                    password:'',
-                    email:''
                 })
-            })     
+            })
+            .catch(err => {
+                this.setState({
+                    errMsg: err.response.data.message
+                })
+            })   
     }
 
     
 
     signUp = (userDat) => {
+        this.clearErrors()
         return profileAxios.post('/auth/signup', {...userDat})
             .then(res => {
                 const {user, token} = res.data
@@ -48,18 +57,17 @@ export default class ProfileProvider extends Component {
                 this.setState({
                     user,
                     token,
-                    password:'',
-                    email:''
                 })
             })
             .catch(err => {
                 this.setState({
                     errMsg:err.response.data.message
                 })
-                console.log(err)
                 return err
             })
     }
+
+    //add favorite function
 
     logOut = () => {
         localStorage.removeItem('user')

@@ -4,6 +4,14 @@ import sidebarData from "../data/sidebarData"
 
 export const {Consumer, Provider} = createContext()
 
+
+const profileAxios = axios.create()
+profileAxios.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token')
+    config.headers.Authorization = `Bearer ${token}`
+    return config
+})
+
 export default class DataProvider extends Component {
     constructor(){
         super();
@@ -18,7 +26,6 @@ export default class DataProvider extends Component {
     //need to revert state upon each button click
 
     getData = (seriesid, timeParam = '?time=3') => {
-        console.log(timeParam)
         return axios.get('/study/' + seriesid + timeParam,seriesid)
             .then( response => {
                 this.setState({
@@ -69,8 +76,7 @@ export default class DataProvider extends Component {
     }
 
     getNewData = (stateObj) => {
-        console.log(stateObj)
-        return axios.post('/api/bls',stateObj
+        return profileAxios.post('/api/bls',stateObj
         )
             .then(res => {
                 console.log(res)
@@ -81,7 +87,7 @@ export default class DataProvider extends Component {
     }
     
     updateData = (seriesid, studyObj) => {
-        return axios.put('/api/bls/'+ seriesid, studyObj )
+        return profileAxios.put('/api/bls/'+ seriesid, studyObj )
             .then(res => {
                 console.log(res)
             })

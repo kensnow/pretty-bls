@@ -15,9 +15,9 @@ class Chart extends Component {
             height: 600,
             margin: {
                 top:40,
-                bottom:100,
-                left:80,
-                right:70
+                bottom:80,
+                left:60,
+                right:60
             },
             seriesid: this.props.location.pathname.split('/')[2] || '',
             query: '?time=3',
@@ -25,7 +25,8 @@ class Chart extends Component {
                 color1:'#341C1C',
                 color2:'#ADFCF9',
                 scaleMod:.05
-            }
+            },
+            toolTip:{}
         }
 
     }
@@ -132,7 +133,6 @@ class Chart extends Component {
         xAxisGroup.transition(t)
         yAxisGroup.transition(t)
 
-
         //render axes labels
         //x-axis label 
         g.append('text')
@@ -163,6 +163,8 @@ class Chart extends Component {
                 .attr('y', y(minVal - minVal * chartSettings.scaleMod))
                 .attr('height', 0)
                 .attr('width', xBand.bandwidth())
+                .on('mouseover', d => this.setState({toolTip: d}))
+                .on('mouseout',  d => this.setState({toolTip: {}}))
             .transition(t)
                 .attr('y', d => y(d.value))
                 .attr('height', d => height - y(d.value))
@@ -179,13 +181,24 @@ class Chart extends Component {
                 <h3>{title}</h3>
                 <h5>{subtitle}</h5>
                 <div className="time-button-container">
-                    <button className="time-button 3-year" onClick={() => this.timeSeriesButtonClick('?time=3')} >3 Years</button>
+                    <button className="time-button 3-year" onClick={() => this.timeSeriesButtonClick('?time=3')} >3 years</button>
                     <button className="time-button 10-year" onClick={() => this.timeSeriesButtonClick('?time=10')}>10 years</button>
                     <button className="time-button 20-year" onClick={() => this.timeSeriesButtonClick('?time=20')}>20 years</button>
+                    <button className="time-button all" onClick={() => this.timeSeriesButtonClick('?time=all')}>all</button>
                 </div>
                 <div className="chart" id="chart">
                     <h6 className="yAxis-title">{yScaleName}</h6>
                     <svg ref={node => this.node = node} width={this.state.width + this.state.margin.left + this.state.margin.right} height={this.state.height + this.state.margin.top + this.state.margin.bottom}></svg>
+                        <div className='data-hud'>
+                        {this.state.toolTip.value && 
+                        <>
+                            <div className="tool-tip">
+                                <p>value:</p><p>{this.state.toolTip.value}</p>
+                                <p>period:</p><p>{`${this.state.toolTip.periodName.substring(0, 3)}, ${this.state.toolTip.year}`}</p>
+                            </div>
+                        </>
+                    }
+                    </div>
                 </div>
 
                 <ChartDetails title={title} subtitle={subtitle} description={description} />

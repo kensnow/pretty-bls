@@ -12,9 +12,8 @@ app.use('/api', expressJwt({secret: process.env.SECRET}))
 
 app.use('/auth', require('./routes/auth'))
 app.use('/api/profile', require('./routes/profile'))
-app.use('/study', require('./routes/study'))
 app.use('/api/bls', require('./routes/bls'))
-
+app.use('/study', require('./routes/study'))
 app.use((err, req, res, next) => {
     console.error(err)
     if (err.name === 'UnauthorizedError'){

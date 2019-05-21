@@ -9,6 +9,7 @@ import ErrMsg from "./ErrMsg"
 import Admin from './Admin'
 import SignUp from './SignUp'
 import LogIn from './LogIn'
+import AdminRoute from './AdminRoute'
 
 function MainView() {
     return (
@@ -16,7 +17,7 @@ function MainView() {
 
             
                 <Route exact path="/" component={Home} />
-                <Route path="/about" component={About} />
+                <AdminRoute path="/about" component={About} />
                 <Route path="/admin" component={Admin} />
                 <Route path='/signup' component={SignUp} />
                 <Route path='/login' component={LogIn} />

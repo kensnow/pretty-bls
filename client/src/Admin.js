@@ -2,6 +2,12 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import {withDataProvider} from './providers/DataProvider'
 
+const profileAxios = axios.create()
+profileAxios.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token')
+    config.headers.Authorization = `Bearer ${token}`
+    return config
+})
 class Admin extends Component {
     constructor(){
         super()
@@ -25,7 +31,7 @@ class Admin extends Component {
     }
 
     getStudies = () => {
-        return axios.get('/api/bls')
+        return profileAxios.get('/api/bls')
             .then(res => {
                 this.setState({
                     studies:res.data

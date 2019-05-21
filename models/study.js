@@ -17,8 +17,14 @@ const studySchema = new mongoose.Schema({
         period: String,
         periodName:String,
         value: Number,
-        footnotes:[]
-    }]
+        date: Date,
+        footnotes:[{
+            code: String,
+            text: String
+        }]
+    }],
+
+    
 })
 
 module.exports = mongoose.model('Study', studySchema)

@@ -58,7 +58,7 @@ studyRouter.route('/:id')
         const currentDate = new Date()
         Study.findOne({seriesid: id})
             .then(foundStudy => {
-                if (foundStudy === 'all'){
+                if (params.time === 'all'){
                     res.status(200).send(foundStudy)
                 } else {
                     const trimmedStudyArr = foundStudy.data.filter(dataPoint => {

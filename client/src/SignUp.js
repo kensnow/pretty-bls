@@ -27,7 +27,7 @@ function SignUp(props) {
                             <input onChange={handleChange} type="password" name='password' placeholder='enter password'/>
                             <input onChange={handleChange} type="password" name='confirm' placeholder='confirm password'/>
                             <button>Sign Up</button>
-                            {errMsg && <p className="error">{errMsg}</p>}
+                            {props.errMsg && <p className='error'>{props.errMsg}</p>}
                         </form>
                     )
                 }

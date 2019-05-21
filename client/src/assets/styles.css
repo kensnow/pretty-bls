@@ -66,7 +66,6 @@ footer{
     padding: 10px;
     border-radius: 4px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 10px 0 rgba(0, 0, 0, 0.1);
-
     
 }
 
@@ -112,6 +111,29 @@ footer{
     border-radius: 4px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     
+}
+
+.tool-tip{
+    position: absolute;
+    top:0;
+    right:4px;
+    /* padding: 20px; */
+    display:grid;
+    grid-template: auto auto / 65px 100px;
+    color:rgba(75,75,75, .6);
+}
+
+.tool-tip > p {
+    display: inline-block;
+    
+}
+
+.warning{
+    color:orange;
+}
+
+.chart{
+    position:relative;
 }
 
 h5{

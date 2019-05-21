@@ -19,27 +19,32 @@ authRouter.post('/signup', (req, res, next) => {
                     res.status(500)
                     return next(err)
                 }
-                const token = jwt.sign(user.toObject(), process.env.SECRET)
-                return res.status(201).send({ success: true, user: user.toObject(), token })
+                const token = jwt.sign(user.withoutElement('password', 'isAdmin'), process.env.SECRET)
+                return res.status(201).send({ success: true, user: user.withoutElement('password', 'isAdmin'), token })
             })
         }
     })
 })
 
 authRouter.post('/login', (req, res, next) => {
-    User.findOne({email: req.body.email.toLowerCase()}, (err,user) => {
+    User.findOne({ email: req.body.email.toLowerCase() }, (err, user) => {
         if (err) {
             return next(err)
         }
-        if(!user || user.password !== req.body.password){
+        if (!user) {
             res.status(403)
             return next(new Error('Email or Password are incorrect'))
         }
-
-        const token = jwt.sign(user.toObject(), process.env.SECRET)
-
-        return res.status(200).send({token, user: user.toObject(), success:true})
+        user.checkPassword(req.body.password, (err, match) => {
+            
+            if (err) return res.status(500).send(err)
+            if (!match) return res.status(401).send({ success: false, message: 'Email or password are incorrect' })
+            user = user.withoutElement('password', (user.isAdmin ? null : 'isAdmin'))
+            const token = jwt.sign(user, process.env.SECRET)
+            return res.status(200).send({ token, user: user, success: true })
+        })
     })
 })
+
 
 module.exports = authRouter
