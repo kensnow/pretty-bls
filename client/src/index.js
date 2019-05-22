@@ -5,12 +5,17 @@ import App from "./App"
 import {BrowserRouter} from "react-router-dom" 
 import DataProvider from "./providers/DataProvider"
 import ProfileProvider from './providers/ProfileProvider'
+import ChartProvider from './providers/ChartProvider';
 
 render(
     <DataProvider>
         <ProfileProvider>
             <BrowserRouter>
-                <App/>
+                <ChartProvider>
+                
+                    <App/>
+                
+                </ChartProvider>
             </BrowserRouter>
         </ProfileProvider>
     </DataProvider>,   

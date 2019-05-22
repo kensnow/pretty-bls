@@ -20,13 +20,14 @@ class Chart extends Component {
                 right:60
             },
             seriesid: this.props.location.pathname.split('/')[2] || '',
-            query: '?time=3',
             chartSettings:{
+                time:3,
                 color1:'#341C1C',
                 color2:'#ADFCF9',
                 scaleMod:.05
             },
             toolTip:{
+                
                 hover:{},
                 hi:[],
                 lo:[],
@@ -39,31 +40,44 @@ class Chart extends Component {
 
     componentDidMount = () => {
 
+        this.updateQueryParams()
+
         this.setState({
             width: document.getElementById('chart').clientWidth - this.state.margin.left - this.state.margin.right, //get width from container
             height: document.getElementById('chart').clientHeight - this.state.margin.top - this.state.margin.bottom, //get height from container
-            query: this.props.location.search || '?time=3'
+ 
         },
-            () => this.getDataRouter(this.state.query, this.state.seriesid)
+            () => this.getDataRouter(this.state.chartSettings.time, this.state.seriesid)
         )
     }
 
-    getDataRouter = async (query, seriesId) => {
-        if (this.props.dataCheck(query, seriesId)) {
-            const filteredData = await this.props.filterStateData(query)
+    updateQueryParams = async () => {
+        const queryParams =  await this.props.location.search.substring(1).split('&').reduce((acc, cur) => {
+            const [key, val] = cur.split('=')
+            return {...acc, [key]: val}
+        }, {})
+        this.setState(ps => ({
+            chartSettings:{
+                ...ps.chartSettings,
+                ...queryParams
+            }
+        }))
+    }
+
+    getDataRouter = async (time, seriesId) => {
+        if (this.props.dataCheck(time, seriesId)) {
+            const filteredData = await this.props.filterStateData(time)
             this.createBarChart(filteredData, this.props.study, this.state.chartSettings)
         } else {
-            await this.props.getData(this.state.seriesid, query)
+            await this.props.getData(this.state.seriesid, `?time=${time}`)
             await this.state.seriesid && this.createBarChart(this.props.study.data, this.props.study, this.state.chartSettings)
         }
     }
 
     timeSeriesButtonClick = async (timeframe) => {
         d3.selectAll(`svg > *`).remove() //clear previous chart
-        await this.props.history.push(timeframe)
-        await this.setState({
-            query: timeframe
-        })
+        await this.props.history.push(`?time=${timeframe}`)
+        await this.updateQueryParams()
         this.getDataRouter(timeframe)
     }
 
@@ -85,7 +99,7 @@ class Chart extends Component {
         const height = this.state.height
         const margin = this.state.margin
         const canvas = d3.select(node)
-
+        console.log(this)
         //useful data info
         const minVal = d3.min(data, d => d.value)
         const maxVal = d3.max(data, d => d.value)
@@ -160,7 +174,7 @@ class Chart extends Component {
             .attr('y', height + 40)
             .attr('font-size', '20px')
             .attr('text-anchor', 'middle')
-            .text(`${this.state.query.split('=')[1]} years`)
+            .text(`${chartSettings.time} years`)
 
         g.append('text')
             .attr('class', 'y-axis label')
@@ -202,10 +216,10 @@ class Chart extends Component {
                 <h3>{title}</h3>
                 <h5>{subtitle}</h5>
                 <div className="time-button-container">
-                    <button className="time-button 3-year" onClick={() => this.timeSeriesButtonClick('?time=3')} >3 years</button>
-                    <button className="time-button 10-year" onClick={() => this.timeSeriesButtonClick('?time=10')}>10 years</button>
-                    <button className="time-button 20-year" onClick={() => this.timeSeriesButtonClick('?time=20')}>20 years</button>
-                    <button className="time-button all" onClick={() => this.timeSeriesButtonClick('?time=all')}>all</button>
+                    <button className="time-button 3-year" onClick={() => this.timeSeriesButtonClick('3')} >3 years</button>
+                    <button className="time-button 10-year" onClick={() => this.timeSeriesButtonClick('10')}>10 years</button>
+                    <button className="time-button 20-year" onClick={() => this.timeSeriesButtonClick('20')}>20 years</button>
+                    <button className="time-button all" onClick={() => this.timeSeriesButtonClick('all')}>all</button>
                 </div>
                 <div className="chart" id="chart">
                     <h6 className="yAxis-title">{yScaleName}</h6>

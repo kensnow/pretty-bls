@@ -42,25 +42,24 @@ export default class DataProvider extends Component {
         
     }
 
-    dataCheck = (query, seriesId) => {
-        //this function checks if the query is less than the data range already stored in state, returns a true or false
+    dataCheck = (time, seriesId) => {
+        //this function checks if the time is less than the data range already stored in state, returns a true or false
+        console.log(time, seriesId)
         if (this.state.study.seriesid !== seriesId) {return false}
         const currentDate = new Date
         const currentYear = currentDate.getFullYear()
         const oldestDataYear = this.state.study.data ? this.state.study.data[this.state.study.data.length-1].year : currentYear
         console.log(oldestDataYear)
-        const [_,queryNum] = query.split('=')
-        console.log(oldestDataYear, currentYear, +queryNum)
-        return oldestDataYear < currentYear - +queryNum
+        console.log(oldestDataYear, currentYear, +time)
+        return oldestDataYear < currentYear - +time
 
     }
 
-    filterStateData = (query) => {
-        //this function takes the query, and returns the requested data from state
+    filterStateData = (time) => {
+        //this function takes the time, and returns the requested data from state
         const currentDate = new Date
         const currentYear = currentDate.getFullYear()
-        const [_,queryNum] = query.split('=')
-        const beginYear = currentYear - queryNum
+        const beginYear = currentYear - +time
         console.log(currentYear, beginYear)
 
         return this.state.study.data.filter(dataObj => dataObj.year <= currentYear && dataObj.year >= beginYear)

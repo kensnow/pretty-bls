@@ -3,13 +3,14 @@ import {Route, Switch} from "react-router-dom"
 import Home from "./Home"
 import About from "./About"
 import {Consumer} from "./providers/DataProvider"
-import Chart from "./Chart"
+import Chart from "./Chart-old2"
 import Loading from "./Loading"
 import ErrMsg from "./ErrMsg"
 import Admin from './Admin'
 import SignUp from './SignUp'
 import LogIn from './LogIn'
 import AdminRoute from './AdminRoute'
+import DrawChart from './DrawChart'
 
 function MainView() {
     return (
@@ -25,7 +26,7 @@ function MainView() {
                     {value => 
                         <Loading loading={value.loading}>
                             <ErrMsg errMsg={value.errMsg}>
-                                <Route path="/study/:series_id" component={Chart} />
+                                <Route path="/study/:series_id" component={DrawChart} />
                             </ErrMsg>
                         </Loading>
                     }
