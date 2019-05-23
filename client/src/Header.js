@@ -3,7 +3,6 @@ import { Link } from "react-router-dom"
 import { withProfileProvider } from './providers/ProfileProvider'
 
 function Header(props) {
-    console.log(props)
     return (
         <nav>
             <h1>pBLS</h1>

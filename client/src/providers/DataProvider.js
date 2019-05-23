@@ -26,6 +26,7 @@ export default class DataProvider extends Component {
     //need to revert state upon each button click
 
     getData = (seriesid, timeParam = '?time=3') => {
+        console.log(seriesid, timeParam)
         return axios.get('/study/' + seriesid + timeParam,seriesid)
             .then( response => {
                 this.setState({
@@ -44,13 +45,10 @@ export default class DataProvider extends Component {
 
     dataCheck = (time, seriesId) => {
         //this function checks if the time is less than the data range already stored in state, returns a true or false
-        console.log(time, seriesId)
         if (this.state.study.seriesid !== seriesId) {return false}
         const currentDate = new Date
         const currentYear = currentDate.getFullYear()
         const oldestDataYear = this.state.study.data ? this.state.study.data[this.state.study.data.length-1].year : currentYear
-        console.log(oldestDataYear)
-        console.log(oldestDataYear, currentYear, +time)
         return oldestDataYear < currentYear - +time
 
     }
@@ -75,27 +73,6 @@ export default class DataProvider extends Component {
             })
     }
 
-    getNewData = (stateObj) => {
-        return profileAxios.post('/api/bls',stateObj
-        )
-            .then(res => {
-                console.log(res)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
-    
-    updateData = (seriesid, studyObj) => {
-        return profileAxios.put('/api/bls/'+ seriesid, studyObj )
-            .then(res => {
-                console.log(res)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
-
     componentDidMount(){
         this.getMetaData()
     }
@@ -104,8 +81,6 @@ export default class DataProvider extends Component {
 
         const chartContext = {
             getData: this.getData,
-            getNewData: this.getNewData,
-            updateData: this.updateData,
             filterStateData: this.filterStateData,
             dataCheck: this.dataCheck,
             ...this.state

@@ -6,7 +6,7 @@ import { withDataProvider } from "./DataProvider"
 
 export const { Consumer, Provider } = createContext()
 
-class Chart extends Component {
+class ChartProvider extends Component {
     //need helper functions to parse data & determine chart type
     constructor(props) {
         super(props);
@@ -37,18 +37,21 @@ class Chart extends Component {
 
     }
 
-
     componentDidMount = () => {
+   
+    }
 
-        this.updateQueryParams()
-        // this.getDataRouter(this.state.chartSettings.time, this.state.seriesid)
+    loadSeriesId = (path) => {
         this.setState({
-            width: document.getElementById('chart').clientWidth - this.state.margin.left - this.state.margin.right, //get width from container
-            height: document.getElementById('chart').clientHeight - this.state.margin.top - this.state.margin.bottom, //get height from container
+            seriesid: path.split('/')[2]
+        })
+    }
 
-        },
-            () => this.getDataRouter(this.state.chartSettings.time, this.state.seriesid)
-        )
+    loadChartSize = (width, height) => {
+        this.setState({
+            width,
+            height
+        })
     }
 
     updateQueryParams = async () => {
@@ -103,7 +106,6 @@ class Chart extends Component {
         const height = this.state.height
         const margin = this.state.margin
         const canvas = d3.select(node)
-        console.log(this)
         //useful data info
         const minVal = d3.min(data, d => d.value)
         const maxVal = d3.max(data, d => d.value)
@@ -215,6 +217,8 @@ class Chart extends Component {
             timeSeriesButtonClick: this.timeSeriesButtonClick,
             updateToolTip: this.updateToolTip,
             updateNode: this.updateNode,
+            loadSeriesId:this.loadSeriesId,
+            loadChartSize:this.loadChartSize,
             ...this.state
         }
 
@@ -234,4 +238,4 @@ export const withChartProvider = C => Cprops => (
 )
 
 
-export default withRouter(withDataProvider(Chart))
+export default withRouter(withDataProvider(ChartProvider))
