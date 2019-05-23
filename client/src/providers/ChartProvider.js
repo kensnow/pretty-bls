@@ -19,7 +19,7 @@ class ChartProvider extends Component {
                 left: 60,
                 right: 60
             },
-            seriesid: this.props.location.pathname.split('/')[2] || '',
+            seriesid: '',
             chartSettings: {
                 time: 3,
                 color1: '#341C1C',
@@ -42,12 +42,14 @@ class ChartProvider extends Component {
     }
 
     loadSeriesId = (path) => {
+        console.log(path)
         this.setState({
             seriesid: path.split('/')[2]
         })
     }
 
     loadChartSize = (width, height) => {
+        console.log(width, height)
         this.setState({
             width,
             height
@@ -68,6 +70,7 @@ class ChartProvider extends Component {
     }
 
     getDataRouter = async (time, seriesId) => {
+        console.log(time, seriesId)
         if (this.props.dataCheck(time, seriesId)) {
             const filteredData = await this.props.filterStateData(time)
             this.createBarChart(filteredData, this.props.study, this.state.chartSettings)

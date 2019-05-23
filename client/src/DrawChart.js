@@ -13,11 +13,11 @@ class DrawChart extends Component {
     }
 
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
 
         this.props.updateQueryParams()
-        this.props.loadSeriesId(this.props.location.pathname)
-        this.props.loadChartSize(document.getElementById('chart').clientWidth - this.props.margin.left - this.props.margin.right, document.getElementById('chart').clientHeight - this.props.margin.top - this.props.margin.bottom)
+        await this.props.loadSeriesId(this.props.location.pathname)
+        await this.props.loadChartSize(document.getElementById('chart').clientWidth - this.props.margin.left - this.props.margin.right, document.getElementById('chart').clientHeight - this.props.margin.top - this.props.margin.bottom)
         this.props.getDataRouter(this.props.chartSettings.time, this.props.seriesid)
     }
 

@@ -3,7 +3,6 @@ import {Route, Switch} from "react-router-dom"
 import Home from "./Home"
 import About from "./About"
 import {Consumer} from "./providers/DataProvider"
-import Chart from "./Chart-old2"
 import Loading from "./Loading"
 import ErrMsg from "./ErrMsg"
 import Admin from './Admin'

@@ -1,7 +1,5 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'
-import BlsLink from "./BlsLink"
-import sidebarData from "./data/sidebarData"
 import {withDataProvider} from './providers/DataProvider'
 
 function LinkGroup(props) {
