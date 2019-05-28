@@ -17,7 +17,7 @@ class DrawChart extends Component {
 
         this.props.updateQueryParams()
         await this.props.loadSeriesId(this.props.location.pathname)
-        await this.props.loadChartSize(document.getElementById('chart').clientWidth - this.props.margin.left - this.props.margin.right, document.getElementById('chart').clientHeight - this.props.margin.top - this.props.margin.bottom)
+        await this.props.loadChartSize(document.getElementById('chart').clientWidth - this.props.chartSettings.margin.left - this.props.chartSettings.margin.right, document.getElementById('chart').clientHeight - this.props.chartSettings.margin.top - this.props.chartSettings.margin.bottom)
         this.props.getDataRouter(this.props.chartSettings.time, this.props.seriesid)
     }
 
@@ -48,7 +48,7 @@ class DrawChart extends Component {
                 </div>
                 <div className="chart" id="chart">
                     <h6 className="yAxis-title">{yScaleName}</h6>
-                    <svg ref={node => this.props.updateNode(node)} width={this.props.width + this.props.margin.left + this.props.margin.right} height={this.props.height + this.props.margin.top + this.props.margin.bottom}></svg>
+                    <svg ref={node => this.props.updateNode(node)} width={this.props.chartSettings.width + this.props.chartSettings.margin.left + this.props.chartSettings.margin.right} height={this.props.chartSettings.height + this.props.chartSettings.margin.top + this.props.chartSettings.margin.bottom}></svg>
                     <div className='data-hud'>
                         <h5>period hi</h5>
                         <div className="tool-tip">
