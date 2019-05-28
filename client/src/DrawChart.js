@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react'
 import { withDataProvider } from "./providers/DataProvider"
 import ChartDetails from "./ChartDetails"
 import { withChartProvider } from './providers/ChartProvider'
-
+import ChartSettings from './ChartSettings'
 class DrawChart extends Component {
     constructor(props) {
         super(props)
@@ -45,6 +45,9 @@ class DrawChart extends Component {
                     <button className="time-button 10-year" onClick={() => this.props.timeSeriesButtonClick('10')}>10 years</button>
                     <button className="time-button 20-year" onClick={() => this.props.timeSeriesButtonClick('20')}>20 years</button>
                     <button className="time-button all" onClick={() => this.props.timeSeriesButtonClick('all')}>all</button>
+                </div>
+                <div className="chart-settings-container">
+                    <ChartSettings />
                 </div>
                 <div className="chart" id="chart">
                     <h6 className="yAxis-title">{yScaleName}</h6>

@@ -11,6 +11,7 @@ export default class FormHandler extends Component {
 
     handleChange = (e) => {
         const {name, value} = e.target
+        console.log(name, value)
         this.setState(ps => ({
             inputs: {
                 ...ps.inputs,
@@ -29,13 +30,14 @@ export default class FormHandler extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
+        console.log(this.props.submit, this.state.inputs)
         this.props.submit(this.state.inputs)
-            .then(() => this.clearInputs())
-            .catch(err => {
-                this.setState({
-                    errMsg: err.data
-                })
-            })
+            // .then(() => this.clearInputs())
+            // .catch(err => {
+            //     this.setState({
+            //         errMsg: err.data
+            //     })
+            // })
     }
 
     render() {

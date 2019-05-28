@@ -118,6 +118,19 @@ class ChartProvider extends Component {
 
     }
 
+    updateChartSettings = (settings) => {
+        console.log(settings)
+        this.setState( ps => ({
+            chartSettings: {
+                ...ps.chartSettings,
+                ...settings
+            }
+        }), () => {
+            d3.selectAll(`svg > *`).remove() //clear previous chart
+            this.getDataRouter(this.state.chartSettings.time, this.state.seriesid)
+        })
+    }
+
     dataMouseOver = (data) => {
         this.setState(ps => ({
             toolTip: {
@@ -154,6 +167,7 @@ class ChartProvider extends Component {
             updateNode: this.updateNode,
             loadSeriesId: this.loadSeriesId,
             loadChartSize: this.loadChartSize,
+            updateChartSettings: this.updateChartSettings,
             ...this.state
         }
 
