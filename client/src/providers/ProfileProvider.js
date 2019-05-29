@@ -45,7 +45,9 @@ export default class ProfileProvider extends Component {
             })   
     }
 
-    
+    toggleFavorite = (id, chartSettings) => {
+        
+    }
 
     signUp = (userDat) => {
         this.clearErrors()

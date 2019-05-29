@@ -4,24 +4,12 @@ import ChartDetails from "./ChartDetails"
 import { withChartProvider } from './providers/ChartProvider'
 import ChartSettings from './ChartSettings'
 class DrawChart extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            width: 800,
-            height: 600
-        }
+
+
+    componentDidMount = () => {
+        this.props.prepareChart()
     }
-
-
-    componentDidMount = async () => {
-
-        this.props.updateQueryParams()
-        await this.props.loadSeriesId(this.props.location.pathname)
-        await this.props.loadChartSize(document.getElementById('chart').clientWidth - this.props.chartSettings.margin.left - this.props.chartSettings.margin.right, document.getElementById('chart').clientHeight - this.props.chartSettings.margin.top - this.props.chartSettings.margin.bottom)
-        this.props.getDataRouter(this.props.chartSettings.time, this.props.seriesid)
-    }
-
-
+    
     render() {
         const { title, subtitle, yScaleName, description, ...rest } = this.props.study
 
@@ -41,17 +29,17 @@ class DrawChart extends Component {
                 <h3>{title}</h3>
                 <h5>{subtitle}</h5>
                 <div className="time-button-container">
-                    <button className="time-button 3-year" onClick={() => this.props.timeSeriesButtonClick('3')} >3 years</button>
-                    <button className="time-button 10-year" onClick={() => this.props.timeSeriesButtonClick('10')}>10 years</button>
-                    <button className="time-button 20-year" onClick={() => this.props.timeSeriesButtonClick('20')}>20 years</button>
-                    <button className="time-button all" onClick={() => this.props.timeSeriesButtonClick('all')}>all</button>
+                    <button className="time-button 3-year" onClick={() => this.props.timeSeriesButtonClick('3', this.props.seriesid)} >3 years</button>
+                    <button className="time-button 10-year" onClick={() => this.props.timeSeriesButtonClick('10', this.props.seriesid)}>10 years</button>
+                    <button className="time-button 20-year" onClick={() => this.props.timeSeriesButtonClick('20', this.props.seriesid)}>20 years</button>
+                    <button className="time-button all" onClick={() => this.props.timeSeriesButtonClick('all', this.props.seriesid)}>all</button>
                 </div>
                 <div className="chart-settings-container">
                     <ChartSettings />
                 </div>
                 <div className="chart" id="chart">
                     <h6 className="yAxis-title">{yScaleName}</h6>
-                    <svg ref={node => this.props.updateNode(node)} width={this.props.chartSettings.width + this.props.chartSettings.margin.left + this.props.chartSettings.margin.right} height={this.props.chartSettings.height + this.props.chartSettings.margin.top + this.props.chartSettings.margin.bottom}></svg>
+                    <svg ref={node => this.props.updateNode(node)} width={this.props.chartProps.width + this.props.chartProps.margin.left + this.props.chartProps.margin.right} height={this.props.chartProps.height + this.props.chartProps.margin.top + this.props.chartProps.margin.bottom}></svg>
                     <div className='data-hud'>
                         <h5>period hi</h5>
                         <div className="tool-tip">

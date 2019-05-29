@@ -4,8 +4,8 @@ import {withChartProvider} from './providers/ChartProvider'
 
 function ChartSettings(props) {
     const inputs = {
-        color1:'',
-        color2:'',
+        color1:'#341C1C',
+        color2:'#ADFCF9',
 
     }
     return (

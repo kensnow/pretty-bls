@@ -1,11 +1,12 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'
 import {withDataProvider} from './providers/DataProvider'
-
+import {withChartProvider} from './providers/ChartProvider'
 function LinkGroup(props) {
 
     const linkGroup = props.studies.map((study, i) => <button key={i} className='link button' onClick={()=> {
         props.history.push(`/study/${study.seriesid}`)
+        props.prepareChart()
         }}>{study.title} </button>)
 
     return (
@@ -18,4 +19,4 @@ function LinkGroup(props) {
     )
 }
 
-export default withRouter(withDataProvider(LinkGroup))
+export default withRouter(withChartProvider(withDataProvider(LinkGroup)))

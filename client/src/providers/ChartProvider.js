@@ -13,9 +13,7 @@ class ChartProvider extends Component {
         this.state = {
 
             seriesid: '',
-            chartSettings: {
-                time: 3,
-                type: 'bar',
+            chartProps:{
                 width: 800,
                 height: 600,
                 margin: {
@@ -24,6 +22,10 @@ class ChartProvider extends Component {
                     left: 60,
                     right: 60
                 },
+            },
+            chartSettings: {
+                time: 3,
+                type: 'bar',
                 color1: '#341C1C',
                 color2: '#ADFCF9',
                 scaleMod: .05
@@ -39,14 +41,14 @@ class ChartProvider extends Component {
 
     }
 
-    componentDidMount = () => {
+    mountNode = () => (
         this.setState(ps => ({
-            chartSettings: {
-                ...ps.chartSettings,
+            chartProps: {
+                ...ps.chartProps,
                 node: this.node
             }
         }))
-    }
+    )
 
     loadSeriesId = (path) => {
         this.setState({
@@ -55,10 +57,13 @@ class ChartProvider extends Component {
     }
 
     loadChartSize = (width, height) => {
-        this.setState({
-            width,
-            height
-        })
+        this.setState(ps => ({
+            chartProps: {
+                ...ps.chartProps,
+                width: width,
+                height: height
+            }
+        }))
     }
 
     updateQueryParams = async () => {
@@ -67,6 +72,7 @@ class ChartProvider extends Component {
             return { ...acc, [key]: val }
         }, {})
         this.setState(ps => ({
+            
             chartSettings: {
                 ...ps.chartSettings,
                 ...queryParams
@@ -75,22 +81,25 @@ class ChartProvider extends Component {
     }
 
     getDataRouter = async (time, seriesId) => {
-        console.log(time, seriesId)
+        
         if (this.props.dataCheck(time, seriesId)) {
             const filteredData = await this.props.filterStateData(time)
             this.createChart(
                 filteredData,
                 this.props.study,
+                this.state.chartProps,
                 this.state.chartSettings,
                 {
                     dataMouseOver: this.dataMouseOver,
                     dataMouseOut: this.dataMouseOut
                 })
         } else {
+            
             await this.props.getData(this.state.seriesid, `?time=${time}`)
             await this.state.seriesid && this.createChart(
                 this.props.study.data, 
                 this.props.study, 
+                this.state.chartProps,
                 this.state.chartSettings,
                 {
                     dataMouseOver: this.dataMouseOver,
@@ -99,11 +108,17 @@ class ChartProvider extends Component {
         }
     }
 
-    timeSeriesButtonClick = async (timeframe) => {
+    timeSeriesButtonClick = async (timeframe, seriesid) => {
         d3.selectAll(`svg > *`).remove() //clear previous chart
         await this.props.history.push(`?time=${timeframe}`)
         await this.updateQueryParams()
-        this.getDataRouter(timeframe)
+        this.getDataRouter(timeframe,seriesid)
+    }
+
+    studyButtonClick = async (seriesid) => {
+        await this.props.history.push('/study/' + seriesid)
+        this.getDataRouter(seriesid)
+
     }
 
     updateToolTip = (data) => {
@@ -119,7 +134,6 @@ class ChartProvider extends Component {
     }
 
     updateChartSettings = (settings) => {
-        console.log(settings)
         this.setState( ps => ({
             chartSettings: {
                 ...ps.chartSettings,
@@ -140,7 +154,7 @@ class ChartProvider extends Component {
         }))
     }
 
-    dataMouseOut = (data) => {
+    dataMouseOut = () => {
         this.setState(ps => ({
             toolTip: {
                 ...ps.toolTip,
@@ -151,11 +165,21 @@ class ChartProvider extends Component {
 
     updateNode = (node) => {
         this.node = node
+        
     }
 
-    createChart = (data, metaData, chartSettings, functionsObj) => {
-        createBarChart(data, metaData, chartSettings, functionsObj)
+    createChart = (data, metaData, chartProps, chartSettings, functionsObj) => {
+        createBarChart(data, metaData, chartProps, chartSettings, functionsObj)
         this.updateToolTip(data)
+    }
+
+    prepareChart =  async () => {
+        d3.selectAll(`svg > *`).remove() //clear previous chart
+        this.updateQueryParams()
+        await this.mountNode()
+        await this.loadSeriesId(this.props.location.pathname)
+        await this.loadChartSize(document.getElementById('chart').clientWidth - this.state.chartProps.margin.left - this.state.chartProps.margin.right, document.getElementById('chart').clientHeight - this.state.chartProps.margin.top - this.state.chartProps.margin.bottom)
+        this.getDataRouter(this.state.chartSettings.time, this.state.seriesid)
     }
 
     render() {
@@ -168,6 +192,9 @@ class ChartProvider extends Component {
             loadSeriesId: this.loadSeriesId,
             loadChartSize: this.loadChartSize,
             updateChartSettings: this.updateChartSettings,
+            mountNode:this.mountNode,
+            studyButtonClick: this.studyButtonClick,
+            prepareChart: this.prepareChart,
             ...this.state
         }
 

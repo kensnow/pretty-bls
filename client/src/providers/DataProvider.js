@@ -26,7 +26,6 @@ export default class DataProvider extends Component {
     //need to revert state upon each button click
 
     getData = (seriesid, timeParam = '?time=3') => {
-        console.log(seriesid, timeParam)
         return axios.get('/study/' + seriesid + timeParam,seriesid)
             .then( response => {
                 this.setState({
@@ -41,6 +40,28 @@ export default class DataProvider extends Component {
                    errMsg:"Cannot get data"     
             }))
         
+    }
+
+    getNewData = (stateObj) => {
+        console.log('clicked')
+        return profileAxios.post('/api/bls',stateObj
+        )
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    updateData = (seriesid, studyObj) => {
+        return profileAxios.put('/api/bls/'+ seriesid, studyObj )
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     dataCheck = (time, seriesId) => {
@@ -83,6 +104,8 @@ export default class DataProvider extends Component {
             getData: this.getData,
             filterStateData: this.filterStateData,
             dataCheck: this.dataCheck,
+            getNewData: this.getNewData,
+            updateData: this.updateData,
             ...this.state
         }
 

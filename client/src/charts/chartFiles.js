@@ -1,12 +1,12 @@
 import * as d3 from "d3"
 
-export const createBarChart = (data, metaData, chartSettings, functionsObj) => {
+export const createBarChart = (data, metaData, chartProps, chartSettings, functionsObj) => {
     //establish chart globals
     // const node = this.node
-    const node = chartSettings.node
-    const width = chartSettings.width
-    const height = chartSettings.height
-    const margin = chartSettings.margin
+    const node = chartProps.node
+    const width = chartProps.width
+    const height = chartProps.height
+    const margin = chartProps.margin
     const canvas = d3.select(node)
     //useful data info
     const minVal = d3.min(data, d => d.value)
@@ -31,7 +31,7 @@ export const createBarChart = (data, metaData, chartSettings, functionsObj) => {
 
     const colors = d3.scaleLinear()
         .domain([minVal, maxVal])
-        .range([chartSettings.color1, chartSettings.color2])
+        .range([chartSettings.color2, chartSettings.color1])
 
     const xBand = d3.scaleBand()
         .domain(data.map(d => parseTime(`${d.periodName}, 0, ${d.year}`)).reverse())
