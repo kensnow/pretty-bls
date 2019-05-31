@@ -1,7 +1,7 @@
 import React, { Component, createContext } from 'react'
 import { withRouter } from 'react-router-dom'
 import * as d3 from "d3"
-import { createBarChart } from '../charts/chartFiles'
+import { createBarChart, createLineChart } from '../charts/chartFiles'
 import { withDataProvider } from "./DataProvider"
 
 export const { Consumer, Provider } = createContext()
@@ -28,7 +28,9 @@ class ChartProvider extends Component {
                 type: 'bar',
                 color1: '#341C1C',
                 color2: '#ADFCF9',
-                scaleMod: .05
+                scaleMod: .05,
+                scale: 'linear',
+                scaleLog:2
             },
             toolTip: {
 
@@ -115,12 +117,6 @@ class ChartProvider extends Component {
         this.getDataRouter(timeframe,seriesid)
     }
 
-    studyButtonClick = async (seriesid) => {
-        await this.props.history.push('/study/' + seriesid)
-        this.getDataRouter(seriesid)
-
-    }
-
     updateToolTip = (data) => {
         this.setState(ps => ({
             toolTip: {
@@ -169,13 +165,15 @@ class ChartProvider extends Component {
     }
 
     createChart = (data, metaData, chartProps, chartSettings, functionsObj) => {
-        createBarChart(data, metaData, chartProps, chartSettings, functionsObj)
+        chartSettings.type === 'bar' ?
+            createBarChart(data, metaData, chartProps, chartSettings, functionsObj) :
+            createLineChart(data, metaData, chartProps, chartSettings, functionsObj)
         this.updateToolTip(data)
     }
 
     prepareChart =  async () => {
         d3.selectAll(`svg > *`).remove() //clear previous chart
-        this.updateQueryParams()
+        await this.updateQueryParams()
         await this.mountNode()
         await this.loadSeriesId(this.props.location.pathname)
         await this.loadChartSize(document.getElementById('chart').clientWidth - this.state.chartProps.margin.left - this.state.chartProps.margin.right, document.getElementById('chart').clientHeight - this.state.chartProps.margin.top - this.state.chartProps.margin.bottom)
