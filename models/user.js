@@ -21,13 +21,11 @@ const userSchema = new Schema({
         default: false
     },
     favorites:[{
-        c_id:{
+        chartId:{
             type: objectId,
             ref: 'Study' 
         },
-        name: String,
-        settings:{},
-        url: String
+        chartSettings:{}
     }]
 })
 

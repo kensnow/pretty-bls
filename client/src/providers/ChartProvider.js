@@ -28,9 +28,10 @@ class ChartProvider extends Component {
                 type: 'bar',
                 color1: '#341C1C',
                 color2: '#ADFCF9',
-                scaleMod: .05,
+                scaleMod: 0,
                 scale: 'linear',
-                scaleLog:2
+                scaleLog:2,
+                
             },
             toolTip: {
 
@@ -38,7 +39,8 @@ class ChartProvider extends Component {
                 hi: [],
                 lo: [],
                 avg: ''
-            }
+            }, 
+           
         }
 
     }

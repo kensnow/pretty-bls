@@ -14,7 +14,7 @@ export const createBarChart = (data, metaData, chartProps, chartSettings, functi
 
     const firstEl = data[0] //most recent element
     const lastEl = data[data.length - 1] //oldest element
-
+    const dataPadding = chartSettings.scaleMod > 0 ? chartSettings.scaleMod / 100 : chartSettings.scaleMod
     //useful functions
     const parseTime = d3.timeParse('%B, 0, %Y')
     const formatTime = d3.timeFormat('%b %Y')
@@ -38,16 +38,16 @@ export const createBarChart = (data, metaData, chartProps, chartSettings, functi
         .range([0, width])
         .paddingInner(.2)
         .paddingOuter(.2)
-    console.log(chartSettings)
+
     //TODO make y scale dynamically based on data range
     let y
     chartSettings.scale === 'linear' ? 
         (y = d3.scaleLinear()
-            .domain([minVal - minVal * chartSettings.scaleMod, maxVal + maxVal * chartSettings.scaleMod])
+            .domain([minVal - minVal * dataPadding, maxVal + maxVal * dataPadding])
             .range([height, 0]))
         :
         (y = d3.scaleLog()
-            .domain([minVal - minVal * chartSettings.scaleMod, maxVal + maxVal * chartSettings.scaleMod])
+            .domain([minVal - minVal * dataPadding, maxVal + maxVal * dataPadding])
             .range([height, 0])
             .base(2))
     
@@ -108,7 +108,7 @@ export const createBarChart = (data, metaData, chartProps, chartSettings, functi
         .attr('class', 'bar')
         .attr('fill', d => colors(d.value))
         .attr('x', d => xBand(parseTime(`${d.periodName}, 0, ${d.year}`)))
-        .attr('y', y(minVal - minVal * chartSettings.scaleMod))
+        .attr('y', y(minVal - minVal * dataPadding))
         .attr('height', 0)
         .attr('width', xBand.bandwidth())
         .on('mouseover', d => functionsObj.dataMouseOver(d))
@@ -132,7 +132,7 @@ export const createLineChart = (data, metaData, chartProps, chartSettings, funct
  
     const firstEl = data[0] //most recent element
     const lastEl = data[data.length - 1] //oldest element
-
+    const dataPadding = chartSettings.scaleMod > 0 ? chartSettings.scaleMod / 100 : chartSettings.scaleMod
     //useful functions
     const parseTime = d3.timeParse('%B, 0, %Y')
     const formatTime = d3.timeFormat('%b %Y')
@@ -151,16 +151,15 @@ export const createLineChart = (data, metaData, chartProps, chartSettings, funct
         .domain([minVal, maxVal])
         .range([chartSettings.color2, chartSettings.color1])
 
-    console.log(chartSettings)
     //TODO make y scale dynamically based on data range
     let y
     chartSettings.scale === 'linear' ? 
         (y = d3.scaleLinear()
-            .domain([minVal - minVal * chartSettings.scaleMod, maxVal + maxVal * chartSettings.scaleMod])
+            .domain([minVal - minVal * dataPadding, maxVal + maxVal * dataPadding])
             .range([height, 0]))
         :
         (y = d3.scaleLog()
-            .domain([minVal - minVal * chartSettings.scaleMod, maxVal + maxVal * chartSettings.scaleMod])
+            .domain([minVal - minVal * dataPadding, maxVal + maxVal * dataPadding])
             .range([height, 0])
             .base(chartSettings.scaleLog))
     
@@ -222,7 +221,7 @@ export const createLineChart = (data, metaData, chartProps, chartSettings, funct
         .datum(data)
         .attr('class', 'line')
         .attr('fill','none')
-        .attr('stroke', d => colors(d.value))
+        .attr('stroke', chartSettings.color1)
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 1.5)
@@ -238,9 +237,6 @@ export const createLineChart = (data, metaData, chartProps, chartSettings, funct
             .attr('fill', 'transparent')
             .on('mouseover', d => functionsObj.dataMouseOver(d))
             .on('mouseout', d => functionsObj.dataMouseOut(d))
-            .transition(t)
-            .attr('y', d => y(d.value))
-            .attr('height', d => height - y(d.value))
             
  
 }

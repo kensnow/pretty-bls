@@ -1,7 +1,7 @@
 import React, { Component, createContext } from 'react'
 import axios from 'axios'
 
-const {Consumer, Provider} = createContext()
+const { Consumer, Provider } = createContext()
 
 const profileAxios = axios.create()
 profileAxios.interceptors.request.use((config) => {
@@ -11,26 +11,91 @@ profileAxios.interceptors.request.use((config) => {
 })
 
 export default class ProfileProvider extends Component {
-    constructor(){
+    constructor() {
         super()
         this.state = {
-            user:JSON.parse(localStorage.getItem('user')) || {},
+            user: JSON.parse(localStorage.getItem('user')) || {},
             token: localStorage.getItem('token') || '',
-            errMsg:''
+            alert: '',
+            showErr: false
         }
     }
 
-    clearErrors = () => {
+    toggleFavorite = (id, chartSettings) => {
+        this.findStudy(id) ? this.removeFavorite(id) : this.addFavorite(id, chartSettings)
+    }
+
+    findStudy = (id) => {
+        const foundStudy = this.state.user.favorites.find(study => study.chartId === id)
+        return foundStudy
+    }
+
+    addFavorite = async (id, chartSettings) => {
+        try {
+            const updateObject = {
+                userId: this.state.user._id,
+                chartId: id,
+                action: 'add',
+                chartSettings
+            }
+            const res = await profileAxios.put('/api/profile', updateObject)
+            this.setState(ps => ({
+                user: {
+                    ...ps.user,
+                    favorites: [...ps.user.favorites, res.data]
+                },
+                alert: res.data.alert,
+                showErr: true
+            }), () => {
+                this.removealert()
+            }
+            )
+        }
+        catch (alert) {
+            this.setState({ alert: alert })
+        }
+    }
+
+    removeFavorite = async (id) => {
+        try {
+            const indexOfFavorite = this.state.user.favorites.findIndex(favStudy => favStudy.chartId === id)
+            const updateObject = {
+                userId: this.state.user._id,
+                chartId: id,
+                action: 'delete'
+            }
+            const res = await profileAxios.put('/api/profile', updateObject)
+            const userFavs = this.state.user.favorites
+            userFavs.splice(indexOfFavorite, 1)
+            this.setState(ps => ({
+                user: {
+                    ...ps.user,
+                    favorites: [...userFavs]
+                },
+                alert: res.data.alert,
+                showErr: true
+            }), () => {
+                this.removealert()
+            })
+        }
+        catch (alert) {
+            this.setState({ alert: alert })
+        }
+
+    }
+
+    removealert = () => {setTimeout(() => {
         this.setState({
-            errMsg:''
-        })
+            alert:'',
+            showErr: false})
+    }, 3000) 
     }
 
     logIn = (userDat) => {
         this.clearErrors()
-        return profileAxios.post('/auth/login', {...userDat})   
+        return profileAxios.post('/auth/login', { ...userDat })
             .then(res => {
-                const {user, token} = res.data
+                const { user, token } = res.data
                 localStorage.setItem('token', token)
                 localStorage.setItem('user', JSON.stringify(user))
                 this.setState({
@@ -40,20 +105,16 @@ export default class ProfileProvider extends Component {
             })
             .catch(err => {
                 this.setState({
-                    errMsg: err.response.data.message
+                    alert: err.response.data.message
                 })
-            })   
-    }
-
-    toggleFavorite = (id, chartSettings) => {
-        
+            })
     }
 
     signUp = (userDat) => {
         this.clearErrors()
-        return profileAxios.post('/auth/signup', {...userDat})
+        return profileAxios.post('/auth/signup', { ...userDat })
             .then(res => {
-                const {user, token} = res.data
+                const { user, token } = res.data
                 localStorage.setItem('token', token)
                 localStorage.setItem('user', JSON.stringify(user))
                 this.setState({
@@ -63,7 +124,7 @@ export default class ProfileProvider extends Component {
             })
             .catch(err => {
                 this.setState({
-                    errMsg:err.response.data.message
+                    alert: err.response.data.message
                 })
                 return err
             })
@@ -76,7 +137,7 @@ export default class ProfileProvider extends Component {
         localStorage.removeItem('token')
         this.setState({
             user: {},
-            token:''
+            token: ''
         })
     }
 
@@ -85,11 +146,13 @@ export default class ProfileProvider extends Component {
             logIn: this.logIn,
             signUp: this.signUp,
             logOut: this.logOut,
+            toggleFavorite: this.toggleFavorite,
+            findStudy: this.findStudy,
             ...this.state
         }
         return (
             <Provider value={value}>
-                {this.props.children} 
+                {this.props.children}
             </Provider>
         )
     }
@@ -98,6 +161,6 @@ export default class ProfileProvider extends Component {
 
 export const withProfileProvider = C => props => (
     <Consumer>
-        {value => <C {...value} {...props}/>}
+        {value => <C {...value} {...props} />}
     </Consumer>
 )

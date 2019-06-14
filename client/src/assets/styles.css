@@ -116,7 +116,7 @@ footer{
 .data-hud{
     position: absolute;
     top:0;
-    right:4px;
+    left:80px;
 }
 
 .tool-tip{
@@ -136,6 +136,10 @@ footer{
     color:orange;
 }
 
+.chart-wrapper{
+    max-width: 900px;
+    margin: auto;
+}
 .chart{
     position:relative;
 }
@@ -202,7 +206,60 @@ a:hover{
 
 }
 
+.favorite-button{
+    font-size: 40px;
+    transition: .2s;
+    position: absolute;
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+    outline: inherit;
+    right:5%;
+}
 
+.alert{
+    transition: .2s;
+    opacity: 0;
+    position: absolute;
+    right: 5%;
+    top:40px;
+    transform: translate(40%, 0);
+}
+
+
+
+/* Slider */
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;   
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%; 
+    background: #4CAF50;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+  }
 @media(min-width: 600px){
     .linkbar{
     
