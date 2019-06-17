@@ -1,6 +1,5 @@
 import React, { Component, createContext } from 'react'
 import axios from "axios"
-import sidebarData from "../data/sidebarData"
 
 export const {Consumer, Provider} = createContext()
 
