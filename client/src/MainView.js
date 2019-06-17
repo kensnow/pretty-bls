@@ -10,6 +10,7 @@ import SignUp from './SignUp'
 import LogIn from './LogIn'
 import AdminRoute from './AdminRoute'
 import DrawChart from './DrawChart'
+import LinkGroup from './LinkGroup'
 
 function MainView() {
     return (
@@ -21,6 +22,7 @@ function MainView() {
                 <Route path="/admin" component={Admin} />
                 <Route path='/signup' component={SignUp} />
                 <Route path='/login' component={LogIn} />
+                <Route path='/data' component={LinkGroup} />
                 <Consumer>
                     {value => 
                         <Loading loading={value.loading}>

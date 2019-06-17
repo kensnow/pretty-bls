@@ -10,7 +10,6 @@ function App() {
         <div id="mainDiv">
             <Header />
             <MainView />
-            <SideBar />
             <Footer />
         </div>
     )

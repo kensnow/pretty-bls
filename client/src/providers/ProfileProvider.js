@@ -14,7 +14,7 @@ export default class ProfileProvider extends Component {
     constructor() {
         super()
         this.state = {
-            user: JSON.parse(localStorage.getItem('user')) || {},
+            user: JSON.parse(localStorage.getItem('user')) || {favorites:[]},
             token: localStorage.getItem('token') || '',
             alert: '',
             showErr: false
@@ -47,7 +47,7 @@ export default class ProfileProvider extends Component {
                 alert: res.data.alert,
                 showErr: true
             }), () => {
-                this.removealert()
+                this.removeAlert()
             }
             )
         }
@@ -75,7 +75,7 @@ export default class ProfileProvider extends Component {
                 alert: res.data.alert,
                 showErr: true
             }), () => {
-                this.removealert()
+                this.removeAlert()
             })
         }
         catch (alert) {
@@ -84,7 +84,7 @@ export default class ProfileProvider extends Component {
 
     }
 
-    removealert = () => {setTimeout(() => {
+    removeAlert = () => {setTimeout(() => {
         this.setState({
             alert:'',
             showErr: false})
@@ -92,7 +92,7 @@ export default class ProfileProvider extends Component {
     }
 
     logIn = (userDat) => {
-        this.clearErrors()
+        this.removeAlert()
         return profileAxios.post('/auth/login', { ...userDat })
             .then(res => {
                 const { user, token } = res.data
@@ -111,7 +111,7 @@ export default class ProfileProvider extends Component {
     }
 
     signUp = (userDat) => {
-        this.clearErrors()
+        this.removeAlert()
         return profileAxios.post('/auth/signup', { ...userDat })
             .then(res => {
                 const { user, token } = res.data

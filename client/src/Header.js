@@ -10,7 +10,7 @@ function Header(props) {
                 <Link className="link" to="/">Home</Link>
                 <Link className="link" to="/about">About</Link>
                 {props.token ?
-                    <button onClick={() => props.logOut()}>Log Out</button>
+                    <button className='link button' onClick={() => props.logOut()}>Log Out</button>
                     :
                     <>
                     <Link className='link' to='/login'>Log In</Link>
@@ -18,7 +18,7 @@ function Header(props) {
                     </>
                     }
                 
-                <a className="link" href="/#sidebar">Data</a>
+                <a className="link" href="/data">Data</a>
             </div>
         </nav>
     )

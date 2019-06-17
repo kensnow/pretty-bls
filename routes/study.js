@@ -27,7 +27,8 @@ studyRouter.route('/')
                             subtitle:cur.subtitle,
                             yAxisName:cur.yAxisName,
                             description: cur.description,
-                            seriesid:cur.seriesid
+                            seriesid:cur.seriesid,
+                            _id:cur._id
                         }
                         return [...acc, smd] 
                     },[])
