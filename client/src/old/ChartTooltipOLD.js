@@ -1,6 +1,8 @@
-import React, {Fragment} from 'react'
+import React, {Fragment, useState} from 'react'
 
 function ChartTooltip(props) {
+
+
 
     const hiVals = props.toolTip.hi.map((el, i) => i === 0 ? 
         <Fragment key={i}> <p>value:</p><p>{el.value}</p><p>date:</p><p>{`${el.periodName.substring(0, 3)}, ${el.year}`}</p></Fragment> 
@@ -15,11 +17,12 @@ function ChartTooltip(props) {
     <div className='data-hud'>
                     <h5>period hi</h5>
                     <div className="tool-tip">
-                        {hiVals}
+                        {toggle ? hiVals : props.toolTip.hi[0].value}
+                        <button onClick={toggleState()}>...</button>
                     </div>
                     <h5>period lo</h5>
                     <div className="tool-tip">
-                        {loVals}
+                        {toggle ? loVals : props.toolTip.lo[0].value}
                     </div>
                     <h5>period mean</h5>
                     <div className="tool-tip">
