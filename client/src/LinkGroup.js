@@ -7,7 +7,7 @@ function LinkGroup(props) {
     const linkGroup = props.studies.map((study, i) => <button key={i} className='link button' onClick={async () => {
         await props.history.push(`/study/${study.seriesid}?time=3`)
         props.prepareChart()
-        }}>{study.title} </button>)
+        }}><span className="data-link-title">{study.title}</span> </button>)
 
     return (
         <div className="data-group">

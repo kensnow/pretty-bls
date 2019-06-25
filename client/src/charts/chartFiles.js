@@ -54,8 +54,9 @@ export const createBarChart = (data, metaData, chartProps, chartSettings, functi
     
 
     //set up axes
+
     const xAxisCall = d3.axisBottom(x)
-        .ticks(10)
+        .ticks(width < 400 ? 4 : width < 600 ? 6 : 10)
 
     const yAxisCall = d3.axisLeft(y)
         .ticks(10)
@@ -68,14 +69,14 @@ export const createBarChart = (data, metaData, chartProps, chartSettings, functi
         .selectAll('text')
         .attr('y', '10')
         .attr('x', '-5')
-        .attr('font-size', '14px')
+        .attr('font-size', '12px')
         .attr('text-anchor', 'middle')
 
     const yAxisGroup = g.append('g')
         .attr('class', 'y-axis')
         .call(yAxisCall)
         .selectAll('text')
-        .attr('font-size', '14px')
+        .attr('font-size', '12px')
 
     //render axis ticks
     xAxisGroup.transition(t)
@@ -94,8 +95,8 @@ export const createBarChart = (data, metaData, chartProps, chartSettings, functi
     g.append('text')
         .attr('class', 'y-axis label')
         .attr('x', -(height / 2))
-        .attr('y', -25)
-        .attr('font-size', '20px')
+        .attr('y', -40)
+        .attr('font-size', '18px')
         .attr('text-anchor', 'middle')
         .attr('transform', 'rotate(-90)')
         .text(metaData.yAxisName)
@@ -171,7 +172,7 @@ export const createLineChart = (data, metaData, chartProps, chartSettings, funct
 
     //set up axes
     const xAxisCall = d3.axisBottom(x)
-        .ticks(10)
+        .ticks(width < 400 ? 4 : width < 600 ? 6 : 10)
 
     const yAxisCall = d3.axisLeft(y)
         .ticks(10)

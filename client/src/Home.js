@@ -3,9 +3,9 @@ import {Link} from 'react-router-dom'
 function Home() {
     return (
         <div className="center">
-            <h3>important data should look pretty good.</h3>
-            <h5>pretty BLS</h5>
+            <h2>pretty BLS</h2>
             <Link className='link' to='/data'>Find Charts</Link>
+            <h5>important data should look pretty good.</h5>
         </div>
     )
 }

@@ -15,12 +15,12 @@ class ChartProvider extends Component {
             seriesid: '',
             chartProps:{
                 width: 800,
-                height: 600,
+                height: 300,
                 margin: {
-                    top: 40,
-                    bottom: 80,
+                    top: 60,
+                    bottom: 45,
                     left: 60,
-                    right: 60
+                    right: 30
                 },
             },
             chartSettings: {
@@ -178,7 +178,7 @@ class ChartProvider extends Component {
         await this.updateQueryParams()
         await this.mountNode()
         await this.loadSeriesId(this.props.location.pathname)
-        await this.loadChartSize(document.getElementById('chart').clientWidth - this.state.chartProps.margin.left - this.state.chartProps.margin.right, document.getElementById('chart').clientHeight - this.state.chartProps.margin.top - this.state.chartProps.margin.bottom)
+        await this.loadChartSize(document.querySelector('.main').clientWidth - this.state.chartProps.margin.left - this.state.chartProps.margin.right-20, document.querySelector('.main').clientHeight - this.state.chartProps.margin.top - this.state.chartProps.margin.bottom-250)
         this.getDataRouter(this.state.chartSettings.time, this.state.seriesid)
     }
 

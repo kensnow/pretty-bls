@@ -24,6 +24,8 @@ function ChartSettings(props) {
                     return (
                         <div className='chart-settings-container chart-tool-container'>
                             <h3>Chart Settings:</h3>
+
+                            <form onSubmit={handleSubmit} className='chart-settings-form'>
                             <div className='setting-section'>
                                 <h5>History</h5>
                                 <div className="time-button-container">
@@ -34,8 +36,6 @@ function ChartSettings(props) {
                                 </div>
  
                             </div>
-                            <form onSubmit={handleSubmit} className='chart-settings-form'>
-
                                 <div className='setting-section'>
                                     <h5>Chart Type</h5>
                                     <select onChange={handleChange} name='type'>
@@ -67,7 +67,7 @@ function ChartSettings(props) {
                                 </div>
                                 <div className='setting-section'>
                                     <h5>Data Padding</h5>
-                                    <input onChange={handleChange} type="range" className='slider' name='scaleMod' min='0' max='10'/>
+                                    <input onChange={handleChange} type="range" className='slider' name='scaleMod' min='0' max='10' />
                                     
                                 </div>
                                 <button className='update-button button'>update</button>

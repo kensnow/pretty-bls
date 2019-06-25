@@ -5,7 +5,7 @@ import { withProfileProvider } from './providers/ProfileProvider'
 function Header(props) {
     return (
         <nav>
-            <h1>pBLS</h1>
+            
             <div className="linkbar">
                 <Link className="link" to="/">Home</Link>
                 <Link className="link" to="/about">About</Link>

@@ -18,8 +18,8 @@ function MainView() {
 
             <Switch>
                 <Route exact path="/" component={Home} />
-                <AdminRoute path="/about" component={About} />
-                <Route path="/admin" component={Admin} />
+                <Route path="/about" component={About} />
+                <AdminRoute path="/admin" component={Admin} />
                 <Route path='/signup' component={SignUp} />
                 <Route path='/login' component={LogIn} />
                 <Route path='/data' component={LinkGroup} />

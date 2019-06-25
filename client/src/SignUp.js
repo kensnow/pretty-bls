@@ -22,11 +22,13 @@ function SignUp(props) {
             {
                 ({handleChange, handleSubmit}) => {
                     return(
-                        <form onSubmit={handleSubmit}>
+                        <form className='user-validation-form signup-form form' onSubmit={handleSubmit}>
+                            <h5>welcome!</h5>
+                            <h3>Sign up:</h3>
                             <input onChange={handleChange} type="email" name='email' placeholder='enter email'/>
                             <input onChange={handleChange} type="password" name='password' placeholder='enter password'/>
                             <input onChange={handleChange} type="password" name='confirm' placeholder='confirm password'/>
-                            <button>Sign Up</button>
+                            <button className='button'>Sign Up</button>
                             {props.errMsg && <p className='error'>{props.errMsg}</p>}
                         </form>
                     )

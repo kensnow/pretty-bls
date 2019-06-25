@@ -13,6 +13,8 @@ class DrawChart extends Component {
         this.props.prepareChart()
     }
     
+
+
     render() {
         const { title, subtitle, yScaleName, description, ...rest } = this.props.study
 
